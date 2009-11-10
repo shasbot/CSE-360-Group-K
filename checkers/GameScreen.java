@@ -1,94 +1,120 @@
 package checkers;
 import java.awt.*;
 import javax.swing.*;
-public class GameScreen
+import java.awt.event.*;
+
+public class GameScreen implements MouseListener
 {
 	JPanel panel = new JPanel();
-	BoardArea area;
 	JLabel playerturn = new JLabel("Player 1 move");
 	JButton concede = new JButton("Concede?");
 	JButton draw = new JButton("Offer draw");	
 	Container buttoncontain = new Container();
+    BoardPanel boardpan;
+    JLayeredPane layer = new JLayeredPane();
+    JPanel board = new JPanel();
+    int size = 0;
+    Game game;
 
-	GameScreen()
+	GameScreen(int bsize, Game gameparam)
 	{
+        game = gameparam;
+        size = bsize;
 		buttoncontain.setLayout(new GridLayout(1,0));
 		buttoncontain.add(concede);
 		buttoncontain.add(draw);		
 
-		panel.setSize(500,250);
 		panel.setLayout(new BorderLayout());
-		area = new BoardArea(8); //likely will pass size in future
-		area.setVisible(true);
 		panel.add(playerturn,BorderLayout.PAGE_START);	
-		panel.add(area,BorderLayout.CENTER);
 		panel.add(buttoncontain,BorderLayout.PAGE_END);
-	}
-	private class BoardArea extends JComponent
-	{
-		int boardsize;
-		BoardArea(int bsize)
-		{
-			boardsize = bsize;
-		}
-		public void paint(Graphics g1)
-		{
-			//will draw rectangles representing squares of the board
-			Graphics2D g2 = (Graphics2D)g1;
-			int sidelength = getSize().height / boardsize;
-			for (int i = 0; i < boardsize; i++)
-			{
-				int yloc = i * sidelength;
-				for (int j = 0; j < (boardsize*2 + 1); j++)
-				{
-					if(j % 2 == 1)
-					{
-						if(i % 2 == 1)
-						{
-							g2.setColor(Color.black);
-						}
-						else
-						{
-							g2.setColor(Color.red);
-						}
-					}
-					else
-					{
-						if( i % 2 == 1)
-						{
-							g2.setColor(Color.red);
-						}
-						else
-						{
-							g2.setColor(Color.black);
-						}
-					}
-					if( j == boardsize)
-					{
-						g2.setColor(Color.green);
-					}
-					if ( j > boardsize)
-					{
-						if(g2.getColor() == Color.black)
-						{
-							g2.setColor(Color.red);
-						}
-						else
-						{
-							g2.setColor(Color.black);
-						}
-					}
-					int xloc = j*sidelength; 
-					g2.fillRect(xloc,yloc,sidelength,sidelength);	
-				}
+        panel.add(board,BorderLayout.CENTER);
+        board.setLayout(new GridLayout(size, 2 * size));
 
-			}
-		}
-		public void updateBoardState() //will need a parameter of the board at some point
-		{
+        Dimension boarddim = new Dimension(400,200);
+        board.setPreferredSize(boarddim);
+        board.setBounds(0, 0, boarddim.width, boarddim.height);
+        setupBoard(size);
+        
+        board.addMouseListener(this);
 
-		}
-	
+
+
 	}
+
+    public void setupBoard(int boardsize)
+    {
+        board.removeAll();
+        int x = 0;
+        int y = boardsize - 1;
+        int z = 0;
+        for (int i = 0; i < (boardsize * 2 * boardsize); i++)
+        {
+            Square place = new Square( new BorderLayout() );
+            place.setCoord(x, y, z);
+
+            if ( x % 2 == 0)
+            {
+                if(y % 2 == 0)
+                    place.setBackground(Color.BLACK);
+                else
+                    place.setBackground(Color.RED);
+            }
+            else
+            {
+                 if(y % 2 == 0)
+                    place.setBackground(Color.RED);
+                else
+                    place.setBackground(Color.BLACK);
+            }
+            if ((game.board[z][x][y]) != 0)
+               place.add(new JLabel(Integer.toString(game.board[z][x][y])));
+            else
+                place.removeAll();
+            board.add(place);
+            x ++;
+            if ( x == boardsize)
+                z = 1;
+            if ( x == 2 * boardsize)
+            {
+                y--;
+                x = 0;
+                z = 0;
+            }
+
+        }
+    }
+    public void squareClicked(int x, int y, int z)
+    {
+        
+    }
+ public void mousePressed(MouseEvent e)
+    {
+
+    }
+
+    public void mouseDragged(MouseEvent me)
+    {
+
+     }
+
+
+    public void mouseReleased(MouseEvent e)
+    {
+
+    }
+
+    public void mouseClicked(MouseEvent e)
+    {
+        Square jpan = (Square)board.getComponentAt(e.getX(), e.getY());
+        squareClicked(jpan.x,jpan.y,jpan.z);
+        System.out.println("x is " + jpan.x);
+        System.out.println("y is " + jpan.y);
+        System.out.println("z is " + jpan.z);
+        setupBoard(size);
+
+    }
+    public void mouseMoved(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
 
 }
