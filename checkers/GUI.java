@@ -6,27 +6,24 @@ import javax.swing.*;
 public class GUI implements ActionListener 
 {
 	private JFrame window;
-	private GameScreen gamescr;
-    private SetupScreen setupscr;
+	public GameScreen gamescr;
+    public SetupScreen setupscr;
+    Container cp;
 
 GUI()
 {
 	window = new JFrame("Checkers");
-	Container cp = window.getContentPane();
+	cp = window.getContentPane();
 
-    setupscr = new SetupScreen(8);
+    setupscr = new SetupScreen(8,this);
 
 	window.setSize(1000,500);
 	window.setVisible(true);
 	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	cp.add(setupscr.panel);
-    while(!(setupscr.bsetup.all_done()))
-    {
 
-    }
-    cp.remove(setupscr.panel);
-    gamescr = new GameScreen(8,setupscr.setup_game);
-    cp.add(gamescr.panel);    //will run when setup is done
+    
+ 
 
 }
 public void actionPerformed(ActionEvent event)  //important, associates ui actions with consequences

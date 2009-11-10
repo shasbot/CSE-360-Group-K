@@ -18,9 +18,12 @@ public class SetupScreen implements MouseListener
     int playerturn = 1;
     int piecetype = 0;
     String promptstring = new String();
+    Boolean done = false;
+    GUI parent;
 
-    SetupScreen(int bsize)
+    SetupScreen(int bsize, GUI callinggui)
     {
+        parent = callinggui;
 
         size = bsize;
         prompt = new JLabel("player 1 place your safezone");
@@ -66,24 +69,27 @@ public class SetupScreen implements MouseListener
                 bsetup.place_mines(playerturn, z, x, y);
                  if(bsetup.return_number_of_mines_to_setup(2) == 0)
                  {
-                    piecetype = 3;
-                    promptstring = "place your block";
-                 }
-                break;
-            case 3:
-               // bsetup.place_block(playerturn, z, x, y);
-               //  if(bsetup.return_number_of_blocks(2) == 0)
-                 {
                     piecetype = 4;
                     promptstring = "place your piece";
                  }
                 break;
+//            case 3:
+               // bsetup.place_block(playerturn, z, x, y);
+               //  if(bsetup.return_number_of_blocks(2) == 0)
+       //          {
+       //             piecetype = 4;
+       //             promptstring = "place your piece";
+       //          }
+       //         break;
             case 4:
                 bsetup.place_regular(playerturn, z, x, y);
                 setup_game = new Game(bsetup.temp,size,1,10);
                 if (bsetup.all_done())
                 {
-                    
+                    parent.cp.remove(parent.setupscr.panel);
+                    parent.gamescr = new GameScreen(8,setup_game);
+                    parent.cp.add(parent.gamescr.panel);
+                    parent.cp.repaint();
                 }
                 break;
 
