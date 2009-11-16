@@ -3,7 +3,7 @@ package checkers;
 import java.util.Random;
 
 
-public class Game
+public class Game implements java.io.Serializable
 {
     // Instantiating the board
     int [] [] [] board = new int[2][10][10];//2 boards, by 10 columns, by 10 rows
