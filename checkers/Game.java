@@ -145,6 +145,8 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 5;//make the piece safe
             if(board[x][y][z] == 21)//if destination is opposing safe
                 board[x][y][z] = 22;//make it a piece in opposing safe zone
+            if(board[x][y][z] == 4)//if moving onto own bomb
+            	board[x][y][z] = 7;
         }
         if(isPlayerOneKing(a,b,c))
         {
@@ -159,6 +161,8 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 6;//make the king safe
             if(board[x][y][z] == 21)//if destination is opposing safe
                 board[x][y][z] = 24;//make it a king in opposing safe zone
+            if(board[x][y][z] == 4)//if destination is own bomb
+            	board[x][y][z] = 8;
         }
         if(isPlayerTwoPiece(a,b,c))
         {
@@ -173,6 +177,8 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 13;//make the piece safe
             if(board[x][y][z] == 20)//if destination is opposing safe
                 board[x][y][z] = 23;//make it a piece in opposing safe zone
+            if(board[x][y][z] == 12)//if moving to own bomb
+            	board[x][y][z] = 15;
         }
         if(isPlayerTwoKing(a,b,c))
         {
@@ -187,6 +193,8 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 14;//make the king safe
             if(board[x][y][z] == 20)//if destination is opposing safe
                 board[x][y][z] = 25;//make it a king in opposing safe zone
+            if(board[x][y][z] == 12)//if moving onto own bomb
+            	board[x][y][z] = 16;
         }
 
         deletePiece(a,b,c);
@@ -276,7 +284,7 @@ public class Game implements java.io.Serializable
         return piece;
     }
 
-    public boolean isSafe(int boardNumber, int column, int row)
+    public boolean isSafe(int boardNumber, int column, int row)//checks if the opponent's piece is in a safe zone at that location
     {
         boolean safe = false;
         if(playerTurn == 1)

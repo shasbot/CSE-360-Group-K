@@ -18,7 +18,7 @@ public class SetupScreen implements MouseListener
     int playerturn = 1;
     int piecetype = 0;
     String promptstring = new String();
-    Boolean done = false;
+    boolean done = false;
     GUI parent;
 
     SetupScreen(int bsize, GUI callinggui)
@@ -46,43 +46,45 @@ public class SetupScreen implements MouseListener
     public void squareClicked(int x, int y, int z)
     {
         
-        //currently missing blocks
+        boolean placed = false;
+    	//currently missing blocks
         switch (piecetype){
             case 0:
-                bsetup.place_safe_zone(playerturn, z, x, y);
+                placed = bsetup.place_safe_zone(playerturn, z, x, y);
                 promptstring = "place your safezone";
                 if(bsetup.return_number_of_safe_zones(2) == 0)
                 {
                     piecetype = 1;
-                    promptstring = "place your king";
+                    promptstring = "place your mine";
                 }
                 break;
             case 1:
-                bsetup.place_king(playerturn, z, x, y);
-                 if(bsetup.return_number_of_kings(2) == 0)
-                 {
-                    piecetype = 2;
-                    promptstring = "place your mine";
-                 }
-                break;
-            case 2:
-                bsetup.place_mines(playerturn, z, x, y);
+            	placed = bsetup.place_mines(playerturn, z, x, y);
                  if(bsetup.return_number_of_mines_to_setup(2) == 0)
                  {
-                    piecetype = 4;
-                    promptstring = "place your piece";
+                    piecetype = 2;
+                    promptstring = "place your block";
                  }
                 break;
-//            case 3:
-               // bsetup.place_block(playerturn, z, x, y);
-               //  if(bsetup.return_number_of_blocks(2) == 0)
-       //          {
-       //             piecetype = 4;
-       //             promptstring = "place your piece";
-       //          }
-       //         break;
+    
+            case 2:
+                placed = bsetup.place_block(playerturn, z, x, y);
+                 if(bsetup.return_number_of_blocks(2) == 0)
+               {
+                    piecetype = 3;
+                    promptstring = "place your king";
+                 }
+                break;
+            case 3:
+            	placed = bsetup.place_king(playerturn, z, x, y);
+                if(bsetup.return_number_of_kings(2) == 0)
+                {
+                   piecetype = 4;
+                   promptstring = "place your piece";
+                }
+               break;
             case 4:
-                bsetup.place_regular(playerturn, z, x, y);
+            	placed = bsetup.place_regular(playerturn, z, x, y);
                 setup_game = new Game(bsetup.temp,size,1,10);
                 if (bsetup.all_done())
                 {
@@ -95,16 +97,27 @@ public class SetupScreen implements MouseListener
 
         }
 
-        if (playerturn == 1)
+        if (playerturn == 1 && placed)
         {
             playerturn = 2;
-            prompt.setText("Player 2" + promptstring);
+            prompt.setText("Player 2 " + promptstring);
+            System.out.println("changed to 2");
+            setupBoard(size);
+        }
+        else if (placed)
+        {
+            playerturn = 1;
+            prompt.setText("Player 1 " + promptstring);
+            System.out.println("changed to 1");
+            setupBoard(size);
         }
         else
         {
-            playerturn = 1;
-            prompt.setText("Player 1" + promptstring);
+        	prompt.setText("Invalid location: " + "Player "+ playerturn + " " + promptstring);
+        	System.out.println("did not change");
         }
+        System.out.println(placed);
+       
         
     }
      public void setupBoard(int boardsize)
@@ -134,8 +147,6 @@ public class SetupScreen implements MouseListener
             }
            if ( bsetup.temp[z][x][y] != 0)
                 place.add(new JLabel(Integer.toString(bsetup.temp[z][x][y])));
-            else
-                place.removeAll();
             board.add(place);
             x ++;
             if ( x == boardsize)
@@ -167,13 +178,21 @@ public void mousePressed(MouseEvent e)
 
     public void mouseClicked(MouseEvent e)
     {
-        
+        try
+        {
         Square jpan = (Square)board.getComponentAt(e.getX(), e.getY());
         squareClicked(jpan.x,jpan.y,jpan.z);
         System.out.println("x is " + jpan.x);
         System.out.println("y is " + jpan.y);
         System.out.println("z is " + jpan.z);
-        setupBoard(size);
+        //setupBoard(size);
+        }
+        catch(ClassCastException except)
+        {
+        	JPanel notsqr = (JPanel)board.getComponentAt(e.getX(), e.getY());
+        	if (board != notsqr)
+        	System.out.println(notsqr.toString());
+        }
 
     }
     public void mouseMoved(MouseEvent e) {}
