@@ -656,7 +656,7 @@ public class Game implements java.io.Serializable
         {
             if(playerTurn == 1)
             {
-                if(z==a)//if it stays on the same board
+                if(x==a)//if it stays on the same board
                 {
                     if(z-c == 1)//if it moved forward one space
                         if(y-b == 1 || b-y == 1)//if it moved one space to the left of the right
@@ -689,7 +689,7 @@ public class Game implements java.io.Serializable
             }
             if(playerTurn == 2)
             {
-                if(z==a)//if it stays on the same board
+                if(x==a)//if it stays on the same board
                 {
                     if(z-c == -1)//if it moved backwards one space
                         if(y-b == 1 || b-y == 1)//if it moved one space to the left of the right

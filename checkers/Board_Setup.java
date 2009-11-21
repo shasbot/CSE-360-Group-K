@@ -355,7 +355,7 @@ public boolean place_mines(int player, int Z_Cord, int X_Cord, int Y_Cord)
     }
     return mines_can_be_placed;
 }
-
+//
 public boolean place_block(int player, int Z_Cord, int X_Cord, int Y_Cord)
 {
 	boolean block_can_be_placed = false;
