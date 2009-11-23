@@ -134,35 +134,28 @@ public class SetupScreen implements MouseListener
             if ( x % 2 == 0)
             {
                 if(y % 2 == 0)
-                    place.setBackground(Color.RED);
-                else
                     place.setBackground(Color.BLACK);
+                else
+                    place.setBackground(Color.RED);
             }
             else
             {
                  if(y % 2 == 0)
-                    place.setBackground(Color.BLACK);
-                else
                     place.setBackground(Color.RED);
+                else
+                    place.setBackground(Color.BLACK);
             }
            if ( bsetup.temp[z][x][y] != 0)
                 place.add(new JLabel(Integer.toString(bsetup.temp[z][x][y])));
             board.add(place);
             x ++;
             if ( x == boardsize)
+                z = 1;
+            if ( x == 2 * boardsize)
             {
-            	if (z == 0)
-            	{
-            		z = 1;
-            		x = 0;
-            	    board.add(new JPanel());
-            	}
-            	else
-            	{
-            		 y--;
-                     x = 0;
-                     z = 0;
-            	}
+                y--;
+                x = 0;
+                z = 0;
             }
 
         }

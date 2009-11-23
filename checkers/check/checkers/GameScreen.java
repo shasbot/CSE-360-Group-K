@@ -1,7 +1,6 @@
 package checkers;
 import java.awt.*;
 import javax.swing.*;
-
 import java.awt.event.*;
 import java.io.*;
 
@@ -17,8 +16,7 @@ public class GameScreen implements MouseListener, ActionListener
     int size = 0;
     Game game;
     JButton saveGameButton = new JButton("Save Game");
-    int a,b,c,boardNumber,columns,rows;
-    boolean selected = false;
+    int a,b,c,x,y,z,boardNumber,columns,rows;
     
 	GameScreen(int bsize, Game gameparam)
 	{
@@ -62,16 +60,16 @@ public class GameScreen implements MouseListener, ActionListener
             if ( x % 2 == 0)
             {
                 if(y % 2 == 0)
-                    place.setBackground(Color.RED);
-                else
                     place.setBackground(Color.BLACK);
+                else
+                    place.setBackground(Color.RED);
             }
             else
             {
                  if(y % 2 == 0)
-                    place.setBackground(Color.BLACK);
-                else
                     place.setBackground(Color.RED);
+                else
+                    place.setBackground(Color.BLACK);
             }
             if ((game.board[z][x][y]) != 0)
                place.add(new JLabel(Integer.toString(game.board[z][x][y])));
@@ -80,57 +78,19 @@ public class GameScreen implements MouseListener, ActionListener
             board.add(place);
             x ++;
             if ( x == boardsize)
+                z = 1;
+            if ( x == 2 * boardsize)
             {
-            	if (z == 0)
-            	{
-            		z = 1;
-            		x = 0;
-            		board.add(new JPanel());
-            	}
-            	else
-            	{
-            		 y--;
-                     x = 0;
-                     z = 0;
-            	}
+                y--;
+                x = 0;
+                z = 0;
             }
 
         }
     }
-
-        public void actionPerformed(ActionEvent e)
-    {
-        if (e.getSource() == saveGameButton)
-        {
-            try
-            {
-              System.out.println("game being written");
-              ObjectOutputStream gamesaver = new ObjectOutputStream(new FileOutputStream("savedgame"));
-              gamesaver.writeObject(game);
-              gamesaver.close();
-            }
-            catch(IOException except)
-            {
-                System.out.println("error writing file");
-            }
-        }
-    }
-
     public void squareClicked(int x, int y, int z)
     {
-        if(!selected)
-        {
-          selected = true;
-          a = x;
-          b = y;
-          c = z;
-        }
-        else
-        {
-            selected = false;
-            tryMove(a,b,c,x,y,z);
-        }
-
+        
     }
  public void mousePressed(MouseEvent e)
     {
@@ -155,61 +115,87 @@ public class GameScreen implements MouseListener, ActionListener
         System.out.println("x is " + jpan.x);
         System.out.println("y is " + jpan.y);
         System.out.println("z is " + jpan.z);
+        setupBoard(size);
 
     }
     public void mouseMoved(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
 
-
-
-    public void tryMove(int a, int b, int c, int x, int y, int z)
+    public void actionPerformed(ActionEvent e)
     {
-        System.out.println("Validate move says: " + game.validateMove(c,a,b,z,x,y));
-        System.out.println("CheckJumps() says: " + game.checkJumps());
-         if(game.validateMove(c,a,b,z,x,y) == true)
-         {
-             game.move(c,a,b,z,x,y);// make move if move is valid
-             trackTurn(a,b,c,x,y,z);
-             setupBoard(size);
-         }
-         else
-         {
-             System.out.println("Invalid move");
-         }
-    }
-
-        public void trackTurn(int a, int b, int c, int x, int y, int z)
+        if (e.getSource() == saveGameButton)
         {
-            if(Math.abs((a-x)) >= 2 ) //if jumped
+            try
             {
-        
-                if(!game.hasJumpsRemaining(z, x, y))
+              System.out.println("game being written");
+              ObjectOutputStream gamesaver = new ObjectOutputStream(new FileOutputStream("savedgame"));
+              gamesaver.writeObject(game);
+              gamesaver.close();
+            }
+            catch(IOException except)
+            {
+                System.out.println("error writing file");
+            }
+        }
+    }
+    //stores values of the selceted pieces' locations
+        public void squareSelectClick(int s,int t,int u)// saving co-ordinates of starting location
+        {
+             a = s;
+             b = t;
+             c = u;
+        }
+        public void squareMoveClick(int p,int q,int r)// saving co-ordinates of ending location
+        {
+             x = p;
+             y = q;
+             z = r;
+        }
+        public void squareClicked(int a, int b, int c, int x, int y, int z)
+        {
+            if(game.validateMove(a,b,c,x, y,z) == true)
+            {
+                game.move(a,b,c, x, y, z);// make move if move is valid
+            }
+            else
+            {
+                System.out.println("Invalid move");
+            }
+            // will take of the handling of other function as well
+        }
+
+        public void trackTurn()
+        {
+            if(game.checkJumps())
+            {
+                game.move(a, b, c, x, y, z);
+                if(game.hasJumpsRemaining(boardNumber, columns, rows)&&(game.playerTurn == 1))
                 {
-                    if (game.playerTurn == 1)
-                        game.playerTurn = 2;
-                    else
-                        game.playerTurn = 1;
+                    //change player turn label to 1
+                }
+                if(game.hasJumpsRemaining(boardNumber, columns, rows)&&(game.playerTurn == 0))
+                {
+                    //change player turn label to 0
+                }
+                if(!game.hasJumpsRemaining(boardNumber, columns, rows))
+                {
+                    game.move(a,b,c,x,y,z);
                 }
              }
-             else
-             {
-                  if (game.playerTurn == 1)
-                      game.playerTurn = 2;
-                 else
-                     game.playerTurn = 1;
-              }
-            
-            playerturn.setText("Player " + game.playerTurn + " move");
-            int playerwin = game.gameOver();
-            if (playerwin != 0)
-            {
-                playerturn.setText("Player" + playerwin + " wins");
-                if (playerwin == 3)
-                    playerturn.setText("Tie Game");
-            }
+            //player turn 2?
 
         }
 
 
+        public void checkGameOver()
+        {
+            // if either of the players run out of pieces
+            if(game.playerOnePieceCount ==0 ||game.playerTwoPieceCount ==0)
+            {
+                System.out.println("The game is over!");
+                System.out.println("Congratulations " + game.gameOver()+ "!!!");
+
+           }
+        }
 }

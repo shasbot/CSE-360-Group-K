@@ -139,8 +139,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 0;
                 playerOnePieceCount = playerOnePieceCount -1;
             }
-            else
-            {
             if(board[x][y][z] == 0)//if the zdestination is completely empty
                 board[x][y][z] = 1;//make it contain a piece with nothing under it
             if(board[x][y][z] == 20)//if destination is safe
@@ -149,7 +147,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 22;//make it a piece in opposing safe zone
             if(board[x][y][z] == 4)//if moving onto own bomb
             	board[x][y][z] = 7;
-            }
         }
         if(isPlayerOneKing(a,b,c))
         {
@@ -158,8 +155,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 0;
                 playerOnePieceCount = playerOnePieceCount -1;
             }
-            else
-            {
             if(board[x][y][z] == 0)//if the destination is completely empty
                 board[x][y][z] = 2;//make it contain a king with nothing under it
             if(board[x][y][z] == 20)//if destination is safe
@@ -168,7 +163,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 24;//make it a king in opposing safe zone
             if(board[x][y][z] == 4)//if destination is own bomb
             	board[x][y][z] = 8;
-            }
         }
         if(isPlayerTwoPiece(a,b,c))
         {
@@ -177,8 +171,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 0;
                 playerTwoPieceCount = playerTwoPieceCount -1;
             }
-            else
-            {
             if(board[x][y][z] == 0)//if the destination is completely empty
                 board[x][y][z] = 9;//make it contain a piece with nothing under it
             if(board[x][y][z] == 21)//if destination is safe
@@ -187,7 +179,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 23;//make it a piece in opposing safe zone
             if(board[x][y][z] == 12)//if moving to own bomb
             	board[x][y][z] = 15;
-            }
         }
         if(isPlayerTwoKing(a,b,c))
         {
@@ -196,8 +187,6 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 0;
                 playerTwoPieceCount = playerTwoPieceCount -1;
             }
-            else
-            {           
             if(board[x][y][z] == 0)//if the destination is completely empty
                 board[x][y][z] = 10;//make it contain a king with nothing under it
             if(board[x][y][z] == 21)//if destination is safe
@@ -206,11 +195,10 @@ public class Game implements java.io.Serializable
                 board[x][y][z] = 25;//make it a king in opposing safe zone
             if(board[x][y][z] == 12)//if moving onto own bomb
             	board[x][y][z] = 16;
-            }
         }
 
         deletePiece(a,b,c);
-        if(playerTurn == 1 && z == boardsize-1)
+        if(playerTurn == 1 && z == 9)
             promote(x,y,z);
         if(playerTurn == 2 && z == 0)
             promote(x,y,z);
@@ -299,8 +287,14 @@ public class Game implements java.io.Serializable
     public boolean isSafe(int boardNumber, int column, int row)//checks if the opponent's piece is in a safe zone at that location
     {
         boolean safe = false;
-        if(board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 6 || board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 14)
-        	safe = true;
+        if(playerTurn == 1)
+        {
+            if(board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 14)
+                safe = true;
+        }
+        else
+            if(board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 6)
+                safe = true;
         return safe;
     }
 
@@ -326,12 +320,12 @@ public class Game implements java.io.Serializable
     {
         boolean moveable = false;
         if(playerTurn == 1)
-            if(isPlayerOnePiece(boardNumber,column,row) || isPlayerOneKing(boardNumber,column,row))
-            	moveable = true;
+            if((board[boardNumber][column][row] == 1) || (board[boardNumber][row][column] == 2) || (board[boardNumber][row][column] == 5) || (board[boardNumber][row][column] == 6) || (board[boardNumber][row][column] == 7) || (board[boardNumber][row][column] == 8))
+                moveable = true;
         if(playerTurn == 2)
-        	if(isPlayerTwoPiece(boardNumber,column,row) || isPlayerTwoKing(boardNumber,column,row))
-        		moveable = true;
-        
+            if((board[boardNumber][column][row] == 9) || (board[boardNumber][row][column] == 10) || (board[boardNumber][row][column] == 13) || (board[boardNumber][row][column] == 14) || (board[boardNumber][row][column] == 15) || (board[boardNumber][row][column] == 16))
+                moveable = true;
+
         return moveable;
 
     }
@@ -497,7 +491,7 @@ public class Game implements java.io.Serializable
     public boolean jumpPerformed(int a, int b, int c, int x, int y, int z)
     {
         boolean jump = false;
-        if(((y-b) == 2) || ((b-y) == 2))
+        if(((x-a) == 2) || ((a-x) == 2))
             jump = true;
         return jump;
     }
@@ -660,123 +654,75 @@ public class Game implements java.io.Serializable
         boolean valid = false;
         if(isMoveable(a,b,c) && isEmpty(x,y,z))//if the piece is movable and destination is valid
         {
-        	if(x!=a)
-    			if(b==y && z==c)
-    				valid = true;
             if(playerTurn == 1)
             {
-            	if(isPiece(a,b,c))
-            	{
-                	if(x==a)//if it stays on the same board
-                	{
-                		if(z-c == 1)//if it moved forward one space
-                			if(y-b == 1 || b-y == 1)//if it moved one space to the left of the right
-                				valid = true;
-                		if(z-c == 2)//if it moved forward two spaces
-                		{
-                			if(y-b == 2)//if it moved two spaces right
-                				if(isJumpable(a,b+1,c+1))
-                					valid = true;
-                			if(b-y == 2)//if it moved two spaces left
-                				if(isJumpable(a,b-1,c+1))
-                					valid = true;
-                		}	                    
-                	}
-            	}
-            	if(isPlayerOneKing(a,b,c))
-            	{
-            		if(x==a)//if it stays on the same board
-            		{
-            			if(jumpPerformed(a,b,c,x,y,z) == false)//if a jump was not performed
-            			{
-            				if((y-b==1 || b-y == 1) && (z-c == 1 || c-z == 1))//if it only moved one column and one row
-            					valid = true;
-            			}
-            			else//if a jump was performed
-            			{
-            				//up and to the right
-            				if(y-b == 2  && z-c == 2)
-            					if(isJumpable(a,y-1,z-1))
-            						valid=true;
-            				//up and to the left
-            				if(b-y == 2 && z-c == 2)
-            					if(isJumpable(a,b-1,z-1))
-            						valid=true;
-            				//down and to the right
-            				if(y-b == 2 && c-z == 2)
-            					if(isJumpable(a,y-1,c-1))
-            						valid=true;
-            				//down and to the left
-            				if(b-y == 2 && c-z == 2)
-            					if(isJumpable(a,b-1,c-1))
-            						valid=true;
-            			}
-            		}
-            	}
-                if(x!=a)
-                    if(b==y && z==c)
+                if(z==a)//if it stays on the same board
+                {
+                    if(z-c == 1)//if it moved forward one space
+                        if(y-b == 1 || b-y == 1)//if it moved one space to the left of the right
+                            valid = true;
+                    if(z-c == 2)//if it moved forward two spaces
+                    {
+                        if(y-b == 2)//if it moved two spaces right
+                            if(isJumpable(a,b+1,c+1))
+                                valid = true;
+                        if(b-y == 2)//if it moved two spaces left
+                            if(isJumpable(a,b-1,c+1))
+                                valid = true;
+                    }
+                    if(isKing(a,b,c) && z-c == -1)//if it is a king and moved backwards one space
+                        if(y-b == 1 || b-y == 1)//if it moved one space to the left or right
+                            valid = true;
+                    if(isKing(a,b,c) && z-c == -2)//if it is a king and moved two spaces backwards
+                    {
+                        if(y-b == 2)//if it moved two spaces right
+                            if(isJumpable(a,b+1,c-1))
+                                valid = true;
+                        if(b-y == 2)//if it moved two spaces left
+                            if(isJumpable(a,b-1,c-1))
+                                valid = true;
+                    }
+                }
+                if(z!=a)
+                    if(b==x && z==c)
                         valid = true;
             }
             if(playerTurn == 2)
             {
-            	if(isPiece(a,b,c))
-            	{
-            		if(x==a)//if it stays on the same board
-            		{
-            			if(z-c == -1)//if it moved backwards one space
-            				if(y-b == 1 || b-y == 1)//if it moved one space to the left of the right
-            					valid = true;
-            			if(z-c == -2)//if it moved backwards two spaces
-            			{
-            				if(y-b == 2)//if it moved two spaces right
-            					if(isJumpable(a,b+1,c-1))
-            						valid = true;
-            				if(b-y == 2)//if it moved two spaces left
-            					if(isJumpable(a,b-1,c-1))
-            						valid = true;
-            			}                    
-            		}
-            		if(z!=a)
-            			if(b==x && z==c)
-            				valid = true;
-            	}
-            	if(isPlayerTwoKing(a,b,c))
-            	{
-            		if(x==a)//if it stays on the same board
-            		{
-            			if(jumpPerformed(a,b,c,x,y,z) == false)//if a jump was not performed
-            			{
-            				if((y-b==1 || b-y == 1) && (z-c == 1 || c-z == 1))//if it only moved one column and one row
-            					valid = true;
-            			}
-            			else//if a jump was performed
-            			{
-            				//up and to the right
-            				if(y-b == 2  && z-c == 2)
-            					if(isJumpable(a,y-1,z-1))
-            						valid=true;
-            				//up and to the left
-            				if(b-y == 2 && z-c == 2)
-            					if(isJumpable(a,b-1,z-1))
-            						valid=true;
-            				//down and to the right
-            				if(y-b == 2 && c-z == 2)
-            					if(isJumpable(a,y-1,c-1))
-            						valid=true;
-            				//down and to the left
-            				if(b-y == 2 && c-z == 2)
-            					if(isJumpable(a,b-1,c-1))
-            						valid=true;
-            			}
-            		}
-            		
-            	}
+                if(z==a)//if it stays on the same board
+                {
+                    if(z-c == -1)//if it moved backwards one space
+                        if(y-b == 1 || b-y == 1)//if it moved one space to the left of the right
+                            valid = true;
+                    if(z-c == -2)//if it moved backwards two spaces
+                    {
+                        if(y-b == 2)//if it moved two spaces right
+                            if(isJumpable(a,b+1,c-1))
+                                valid = true;
+                        if(b-y == 2)//if it moved two spaces left
+                            if(isJumpable(a,b-1,c-1))
+                                valid = true;
+                    }
+                    if(isKing(a,b,c) && z-c == 1)//if it is a king and moved foward one space
+                        if(y-b == 1 || b-y == 1)//if it moved one space to the left or right
+                            valid = true;
+                    if(isKing(a,b,c) && z-c == 2)//if it is a king and moved two spaces forwards
+                    {
+                        if(y-b == 2)//if it moved two spaces right
+                            if(isJumpable(a,b+1,c+1))
+                                valid = true;
+                        if(b-y == 2)//if it moved two spaces left
+                            if(isJumpable(a,b-1,c+1))
+                                valid = true;
+                    }
+                }
+                if(z!=a)
+                    if(b==x && z==c)
+                        valid = true;
             }
-            
         }
-        
-        if(checkJumps() && !jumpPerformed(a,b,c,x,y,z))
-        	valid = false;
+        if((checkJumps() || hasJumpsRemaining(a,b,c)) && !jumpPerformed(a,b,c,x,y,z))//if there was a jump to be taken and the action wasn't a jump
+            valid = false;//then the move is not valid
         return valid;
     }
 
