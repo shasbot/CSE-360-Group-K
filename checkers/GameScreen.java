@@ -19,6 +19,12 @@ public class GameScreen implements MouseListener, ActionListener
     JButton saveGameButton = new JButton("Save Game");
     int a,b,c,boardNumber,columns,rows;
     boolean selected = false;
+    ImageIcon whitePiece = new ImageIcon("whitepiece.png");
+    ImageIcon whiteKing = new ImageIcon("");
+    ImageIcon whiteBlock = new ImageIcon(""); 
+    ImageIcon blackPiece = new ImageIcon(""); 
+    ImageIcon blackKing = new ImageIcon(""); 
+    ImageIcon blackBlock = new ImageIcon(""); 
     
 	GameScreen(int bsize, Game gameparam)
 	{
@@ -43,7 +49,7 @@ public class GameScreen implements MouseListener, ActionListener
         setupBoard(size);
         
         board.addMouseListener(this);
-
+        panel.updateUI();
 
 
 	}
@@ -54,6 +60,7 @@ public class GameScreen implements MouseListener, ActionListener
         int x = 0;
         int y = boardsize - 1;
         int z = 0;
+        int squareData = game.board[z][x][y];
         for (int i = 0; i < (boardsize * 2 * boardsize); i++)
         {
             Square place = new Square( new BorderLayout() );
@@ -73,8 +80,28 @@ public class GameScreen implements MouseListener, ActionListener
                 else
                     place.setBackground(Color.RED);
             }
-            if ((game.board[z][x][y]) != 0)
-               place.add(new JLabel(Integer.toString(game.board[z][x][y])));
+            if (game.isSafe(z, x, y))
+            	place.setBackground(Color.GREEN);
+            
+            if (squareData != 0 && squareData != 4 && squareData != 12)
+            {
+                ImageIcon iconic = new ImageIcon();
+                if (game.isPlayerOneKing(z, x, y))
+                	iconic = whiteKing;
+                if(game.isPlayerOnePiece(z, x, y))
+                	iconic = whitePiece;
+                if(game.isPlayerTwoKing(z, x, y))
+                	iconic = blackKing;
+                if(game.isPlayerTwoPiece(z, x, y))
+                	iconic = blackPiece;
+                if(squareData == 3)
+                	iconic = whiteBlock;
+                if(squareData == 11)
+                	iconic = blackBlock;
+                JLabel squareLabel = new JLabel();
+                squareLabel.setIcon(iconic);
+            	place.add(squareLabel);
+            }	
             else
                 place.removeAll();
             board.add(place);
@@ -96,6 +123,7 @@ public class GameScreen implements MouseListener, ActionListener
             }
 
         }
+        board.updateUI();
     }
 
         public void actionPerformed(ActionEvent e)
@@ -150,11 +178,22 @@ public class GameScreen implements MouseListener, ActionListener
 
     public void mouseClicked(MouseEvent e)
     {
-        Square jpan = (Square)board.getComponentAt(e.getX(), e.getY());
-        squareClicked(jpan.x,jpan.y,jpan.z);
-        System.out.println("x is " + jpan.x);
-        System.out.println("y is " + jpan.y);
-        System.out.println("z is " + jpan.z);
+    	try
+    	{
+    		Square jpan = (Square)board.getComponentAt(e.getX(), e.getY());
+    		squareClicked(jpan.x,jpan.y,jpan.z);
+    		System.out.println("x is " + jpan.x);
+    		System.out.println("y is " + jpan.y);
+    		System.out.println("z is " + jpan.z);
+    		board.repaint();
+    	}
+        catch(ClassCastException except)
+        {
+        	JPanel notsqr = (JPanel)board.getComponentAt(e.getX(), e.getY());
+        	if (board != notsqr)
+        	System.out.println(notsqr.toString());
+        }
+
 
     }
     public void mouseMoved(MouseEvent e) {}
@@ -172,6 +211,7 @@ public class GameScreen implements MouseListener, ActionListener
              game.move(c,a,b,z,x,y);// make move if move is valid
              trackTurn(a,b,c,x,y,z);
              setupBoard(size);
+             board.repaint();
          }
          else
          {
@@ -208,7 +248,7 @@ public class GameScreen implements MouseListener, ActionListener
                 if (playerwin == 3)
                     playerturn.setText("Tie Game");
             }
-
+            
         }
 
 

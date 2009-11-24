@@ -91,7 +91,8 @@ public class SetupScreen implements MouseListener
                     parent.cp.remove(parent.setupscr.panel);
                     parent.gamescr = new GameScreen(8,setup_game);
                     parent.cp.add(parent.gamescr.panel);
-                    parent.cp.repaint();
+                    //parent.cp.repaint();
+                    parent.gamescr.panel.updateUI();
                 }
                 break;
 

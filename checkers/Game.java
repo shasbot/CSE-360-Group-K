@@ -282,7 +282,7 @@ public class Game implements java.io.Serializable
     public boolean isPlayerOnePiece(int boardNumber, int column, int row)
     {
         boolean piece = false;
-        if(board[boardNumber][column][row] == 1 || board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 7 || board[boardNumber][column][row] == 22)
+        if(board[boardNumber][column][row] == 1 || board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 7 || board[boardNumber][column][row] == 22 || board[boardNumber][column][row] == 24)
             piece = true;
         return piece;
 
@@ -291,7 +291,7 @@ public class Game implements java.io.Serializable
     public boolean isPlayerTwoPiece(int boardNumber, int column, int row)
     {
         boolean piece = false;
-        if(board[boardNumber][column][row] == 9 || board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 15 || board[boardNumber][column][row] == 23)
+        if(board[boardNumber][column][row] == 9 || board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 15 || board[boardNumber][column][row] == 23 || board[boardNumber][column][row] == 25)
             piece = true;
         return piece;
     }
@@ -340,10 +340,10 @@ public class Game implements java.io.Serializable
     {
         boolean jumpable = false;
         if(playerTurn == 1){
-            if(board[boardNumber][column][row] == 9 || board[boardNumber][column][row] == 10 || board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 14 || board[boardNumber][column][row] == 15 || board[boardNumber][column][row] == 16)
+            if(isPlayerTwoPiece(boardNumber,column,row))
                 jumpable = true;}
         else
-            if(board[boardNumber][column][row] == 1 || board[boardNumber][column][row] == 2 || board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 6 || board[boardNumber][column][row] == 7 || board[boardNumber][column][row] == 8)
+            if(isPlayerOnePiece(boardNumber,column,row))
                 jumpable = true;
         return jumpable;
     }
