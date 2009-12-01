@@ -21,6 +21,8 @@ public class Game implements java.io.Serializable
 
     int playerOnePieceCount = 0; //Change these during board setup
     int playerTwoPieceCount = 0; //to the correct amounts.
+    static String playerOneName = "";
+    static String playerTwoName = "";
 
     Game(int[][][] x, int size, int turn, int pieces)
     {
@@ -911,6 +913,16 @@ public class Game implements java.io.Serializable
                         }
                         }
         return jumpExists;
+    }
+
+    public static String getUserName(int x)
+    {
+        String y = "";
+        if(x==1)
+            y = playerOneName;
+        else
+            y = playerTwoName;
+        return y;
     }
 
     // returns 0 if game is not over, 1 if Player 1 won, 2 if Player 2 won, 3 if draw

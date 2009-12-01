@@ -19,12 +19,15 @@ public class GameScreen implements MouseListener, ActionListener
     JButton saveGameButton = new JButton("Save Game");
     int a,b,c,boardNumber,columns,rows;
     boolean selected = false;
-    ImageIcon whitePiece = new ImageIcon("whitepiece.png");
-    ImageIcon whiteKing = new ImageIcon("");
-    ImageIcon whiteBlock = new ImageIcon(""); 
-    ImageIcon blackPiece = new ImageIcon(""); 
-    ImageIcon blackKing = new ImageIcon(""); 
-    ImageIcon blackBlock = new ImageIcon(""); 
+    String playerOne = Game.getUserName(1);
+    String playerTwo = Game.getUserName(2);
+    
+    ImageIcon whitePiece = new ImageIcon("pieces/whitepiece.png");
+    ImageIcon whiteKing = new ImageIcon("pieces/whiteking.png");
+    ImageIcon whiteBlock = new ImageIcon("pieces/whiteblock.png"); 
+    ImageIcon blackPiece = new ImageIcon("pieces/blackpiece.png"); 
+    ImageIcon blackKing = new ImageIcon("pieces/blackking.png"); 
+    ImageIcon blackBlock = new ImageIcon("pieces/blackblock.png"); 
     
 	GameScreen(int bsize, Game gameparam)
 	{
@@ -49,20 +52,20 @@ public class GameScreen implements MouseListener, ActionListener
         setupBoard(size);
         
         board.addMouseListener(this);
-        panel.updateUI();
+
 
 
 	}
 
-    public void setupBoard(int boardsize)
+	public void setupBoard(int boardsize)
     {
         board.removeAll();
         int x = 0;
         int y = boardsize - 1;
         int z = 0;
-        int squareData = game.board[z][x][y];
         for (int i = 0; i < (boardsize * 2 * boardsize); i++)
         {
+        	int squareData = game.board[z][x][y];
             Square place = new Square( new BorderLayout() );
             place.setCoord(x, y, z);
 
@@ -80,9 +83,12 @@ public class GameScreen implements MouseListener, ActionListener
                 else
                     place.setBackground(Color.RED);
             }
-            if (game.isSafe(z, x, y))
-            	place.setBackground(Color.GREEN);
-            
+            if (game.isSafe(z, x, y) || game.board[z][x][y] == 20 || game.board[z][x][y] == 21 )
+            {
+            	place.setBackground(Color.ORANGE);
+            }
+            if (selected && a == x && b == y && z == c)
+            	place.setBackground(Color.BLUE);
             if (squareData != 0 && squareData != 4 && squareData != 12)
             {
                 ImageIcon iconic = new ImageIcon();
@@ -102,8 +108,10 @@ public class GameScreen implements MouseListener, ActionListener
                 squareLabel.setIcon(iconic);
             	place.add(squareLabel);
             }	
-            else
+            else 
+            {
                 place.removeAll();
+            }
             board.add(place);
             x ++;
             if ( x == boardsize)
@@ -146,12 +154,13 @@ public class GameScreen implements MouseListener, ActionListener
 
     public void squareClicked(int x, int y, int z)
     {
-        if(!selected)
+        if(!selected && game.isMoveable(z, x, y))
         {
           selected = true;
           a = x;
           b = y;
           c = z;
+   
         }
         else
         {
@@ -178,22 +187,12 @@ public class GameScreen implements MouseListener, ActionListener
 
     public void mouseClicked(MouseEvent e)
     {
-    	try
-    	{
-    		Square jpan = (Square)board.getComponentAt(e.getX(), e.getY());
-    		squareClicked(jpan.x,jpan.y,jpan.z);
-    		System.out.println("x is " + jpan.x);
-    		System.out.println("y is " + jpan.y);
-    		System.out.println("z is " + jpan.z);
-    		board.repaint();
-    	}
-        catch(ClassCastException except)
-        {
-        	JPanel notsqr = (JPanel)board.getComponentAt(e.getX(), e.getY());
-        	if (board != notsqr)
-        	System.out.println(notsqr.toString());
-        }
-
+        Square jpan = (Square)board.getComponentAt(e.getX(), e.getY());
+        squareClicked(jpan.x,jpan.y,jpan.z);
+        System.out.println("x is " + jpan.x);
+        System.out.println("y is " + jpan.y);
+        System.out.println("z is " + jpan.z);
+        setupBoard(size);
 
     }
     public void mouseMoved(MouseEvent e) {}
@@ -211,7 +210,6 @@ public class GameScreen implements MouseListener, ActionListener
              game.move(c,a,b,z,x,y);// make move if move is valid
              trackTurn(a,b,c,x,y,z);
              setupBoard(size);
-             board.repaint();
          }
          else
          {
@@ -241,14 +239,40 @@ public class GameScreen implements MouseListener, ActionListener
               }
             
             playerturn.setText("Player " + game.playerTurn + " move");
+            User_Saver one = new User_Saver(playerOne);
+            User_Saver two = new User_Saver(playerTwo);
+
+
             int playerwin = game.gameOver();
             if (playerwin != 0)
             {
+                String win = "W";String lose = "L";String draw = "D";
                 playerturn.setText("Player" + playerwin + " wins");
                 if (playerwin == 3)
+                {
                     playerturn.setText("Tie Game");
+                    one.add_to_stats(playerTwo);
+                    one.add_to_stats("draw");
+                    two.add_to_stats(playerOne);
+                    two.add_to_stats("draw");
+                }
+                if (playerwin == 1)
+                {
+                   one.add_to_stats(playerTwo);
+                   one.add_to_stats("win");
+                   two.add_to_stats(playerOne);
+                   two.add_to_stats("lose");
+                }
+                if (playerwin == 2)
+                {
+                   one.add_to_stats(playerTwo);
+                   one.add_to_stats("lose");
+                   two.add_to_stats(playerOne);
+                   two.add_to_stats("win");
+                }
+
             }
-            
+
         }
 
 

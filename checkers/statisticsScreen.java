@@ -89,6 +89,56 @@ public class statisticsScreen extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private String playerOne = (String) jComboBox1.getSelectedItem();
+    private String playerTwo = (String) jComboBox2.getSelectedItem();
+    User_Saver one = new User_Saver(playerOne);
+    User_Saver two = new User_Saver(playerTwo);
     // End of variables declaration//GEN-END:variables
+
+    private double[] getStats()//returns games played, won, lost, drawn, and win %
+    {
+        double stats[] = new double[5];
+        double gamesPlayed = 0;
+        double gamesWon = 0;
+        double winPercentage = 0;
+        double gamesLost = 0;
+        double gamesDrawn = 0;
+
+        if(playerTwo == null)
+            for(int i = 2; i<one.lines_infile(); i+=2)
+            {
+                if(one.get_line(i+1).compareToIgnoreCase("W") == 0)
+                    gamesWon+=1;
+                if(one.get_line(i+1).compareToIgnoreCase("L") == 0)
+                    gamesLost+=1;
+                if(one.get_line(i+1).compareToIgnoreCase("D") == 0)
+                    gamesDrawn+=1;
+                gamesPlayed+=1;
+
+            }
+        else
+            for(int i = 2; i<one.lines_infile(); i+=2)
+            {
+                if(one.get_line(i).compareToIgnoreCase(playerTwo) == 0)
+                {
+                    if(one.get_line(i+1).compareToIgnoreCase("W") == 0)
+                        gamesWon+=1;
+                    if(one.get_line(i+1).compareToIgnoreCase("L") == 0)
+                        gamesLost+=1;
+                    if(one.get_line(i+1).compareToIgnoreCase("D") == 0)
+                        gamesDrawn+=1;
+                    gamesPlayed+=1;
+                }
+            }
+        winPercentage = gamesWon/gamesDrawn;
+        stats[0]=gamesPlayed;
+        stats[1]=gamesWon;
+        stats[2]=gamesLost;
+        stats[3]=gamesDrawn;
+        stats[4]=winPercentage;
+
+        return stats;
+
+    }
 
 }

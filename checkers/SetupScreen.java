@@ -1,7 +1,9 @@
 
 package checkers;
 import java.awt.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 /**
  *
@@ -21,6 +23,13 @@ public class SetupScreen implements MouseListener
     boolean done = false;
     GUI parent;
 
+    ImageIcon whitePiece = new ImageIcon("pieces/whitepiece.png");
+    ImageIcon whiteKing = new ImageIcon("pieces/whiteking.png");
+    ImageIcon whiteBlock = new ImageIcon("pieces/whiteblock.png"); 
+    ImageIcon blackPiece = new ImageIcon("pieces/blackpiece.png"); 
+    ImageIcon blackKing = new ImageIcon("pieces/blackking.png"); 
+    ImageIcon blackBlock = new ImageIcon("pieces/blackblock.png"); 
+    
     SetupScreen(int bsize, GUI callinggui)
     {
         parent = callinggui;
@@ -47,7 +56,7 @@ public class SetupScreen implements MouseListener
     {
         
         boolean placed = false;
-    	//currently missing blocks
+    
         switch (piecetype){
             case 0:
                 placed = bsetup.place_safe_zone(playerturn, z, x, y);
@@ -91,7 +100,6 @@ public class SetupScreen implements MouseListener
                     parent.cp.remove(parent.setupscr.panel);
                     parent.gamescr = new GameScreen(8,setup_game);
                     parent.cp.add(parent.gamescr.panel);
-                    //parent.cp.repaint();
                     parent.gamescr.panel.updateUI();
                 }
                 break;
@@ -127,8 +135,11 @@ public class SetupScreen implements MouseListener
         int x = 0;
         int y = boardsize - 1;
         int z = 0;
+        Game game = new Game(bsetup.temp,size,1,5);
+        
         for (int i = 0; i < (boardsize * 2 * boardsize); i++)
         {
+        	int squareData = game.board[z][x][y];
             Square place = new Square( new BorderLayout() );
             place.setCoord(x, y, z);
 
@@ -146,9 +157,33 @@ public class SetupScreen implements MouseListener
                 else
                     place.setBackground(Color.RED);
             }
-           if ( bsetup.temp[z][x][y] != 0)
-                place.add(new JLabel(Integer.toString(bsetup.temp[z][x][y])));
+            if (game.isSafe(z, x, y) || game.board[z][x][y] == 20 || game.board[z][x][y] == 21 )
+            {
+            	place.setBackground(Color.ORANGE);
+            }
+            if (squareData != 0 && squareData != 4 && squareData != 12)
+            {
+                ImageIcon iconic = new ImageIcon();
+                if (game.isPlayerOneKing(z, x, y))
+                	iconic = whiteKing;
+                if(game.isPlayerOnePiece(z, x, y))
+                	iconic = whitePiece;
+                if(game.isPlayerTwoKing(z, x, y))
+                	iconic = blackKing;
+                if(game.isPlayerTwoPiece(z, x, y))
+                	iconic = blackPiece;
+                if(squareData == 3)
+                	iconic = whiteBlock;
+                if(squareData == 11)
+                	iconic = blackBlock;
+                JLabel squareLabel = new JLabel();
+                squareLabel.setIcon(iconic);
+            	place.add(squareLabel);
+            }
+            else
+            	place.removeAll();
             board.add(place);
+            System.out.println(squareData);
             x ++;
             if ( x == boardsize)
             {
@@ -167,6 +202,7 @@ public class SetupScreen implements MouseListener
             }
 
         }
+    
      }
 public void mousePressed(MouseEvent e)
     {
@@ -193,7 +229,7 @@ public void mousePressed(MouseEvent e)
         System.out.println("x is " + jpan.x);
         System.out.println("y is " + jpan.y);
         System.out.println("z is " + jpan.z);
-        //setupBoard(size);
+        setupBoard(size);
         }
         catch(ClassCastException except)
         {
