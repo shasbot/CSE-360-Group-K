@@ -17,10 +17,16 @@ public class GameScreen implements MouseListener, ActionListener
     int size = 0;
     Game game;
     JButton saveGameButton = new JButton("Save Game");
+    JButton endMoveButton = new JButton("end king move");
+    int movedX,movedY,movedZ;
+    
     int a,b,c,boardNumber,columns,rows;
     boolean selected = false;
     String playerOne = Game.getUserName(1);
     String playerTwo = Game.getUserName(2);
+    
+    boolean warped = false;
+	boolean moved = false;
     
     ImageIcon whitePiece = new ImageIcon("pieces/whitepiece.png");
     ImageIcon whiteKing = new ImageIcon("pieces/whiteking.png");
@@ -37,8 +43,10 @@ public class GameScreen implements MouseListener, ActionListener
 		buttoncontain.add(concede);
 		buttoncontain.add(draw);
         buttoncontain.add(saveGameButton);
+        buttoncontain.add(endMoveButton);
 
         saveGameButton.addActionListener(this);
+        endMoveButton.addActionListener(this);
 
 		panel.setLayout(new BorderLayout());
 		panel.add(playerturn,BorderLayout.PAGE_START);	
@@ -150,6 +158,15 @@ public class GameScreen implements MouseListener, ActionListener
                 System.out.println("error writing file");
             }
         }
+        if (e.getSource() == endMoveButton)
+        {
+        	if((warped || moved) && !(game.jumpPerformed(c, a, b, movedZ, movedX, movedY) && game.hasJumpsRemaining(movedZ, movedX, movedY)) )
+        	{
+        		warped = true;
+        		moved = true;
+        		trackTurn(a,b,c,movedX,movedY,movedZ);
+        	}
+        }
     }
 
     public void squareClicked(int x, int y, int z)
@@ -206,9 +223,15 @@ public class GameScreen implements MouseListener, ActionListener
         System.out.println("Validate move says: " + game.validateMove(c,a,b,z,x,y));
         System.out.println("CheckJumps() says: " + game.checkJumps());
          if(game.validateMove(c,a,b,z,x,y) == true)
-         {
+         {	
+        	 if(!(warped && c != z) && !(moved && Math.abs(a-x) == 1))
+        	 {
              game.move(c,a,b,z,x,y);// make move if move is valid
              trackTurn(a,b,c,x,y,z);
+             movedX = x;
+             movedY = y;
+             movedZ = z;
+        	 }
              setupBoard(size);
          }
          else
@@ -219,24 +242,58 @@ public class GameScreen implements MouseListener, ActionListener
 
         public void trackTurn(int a, int b, int c, int x, int y, int z)
         {
-            if(Math.abs((a-x)) >= 2 ) //if jumped
-            {
+
+        	if(game.isKing(z, x, y))  //does not account for newly kinged piece?
+        	{
+        		if( z != c)
+        			warped = true;
+        		if( a != x)
+        			moved = true;
+        		if (moved && warped && !(Math.abs((a-x)) >= 2))  //moved and warped, current move is not jump
+        		{
+        			if (game.playerTurn == 1)
+    					game.playerTurn = 2;
+    				else
+    					game.playerTurn = 1;
+        			moved = false;
+        			warped = false;
+        		}
+        		else if (moved && Math.abs((a-x)) >= 2 && warped)    //moved and warped, and just jumped
+        		{
+        			if(!game.hasJumpsRemaining(z, x, y))
+        			{
+        				if (game.playerTurn == 1)
+        					game.playerTurn = 2;
+        				else
+        					game.playerTurn = 1;
+        				moved = false;
+            			warped = false;
+        			}
+        		}
+        		
+    
+        	}
+        	else
+        	{
+        		if(Math.abs((a-x)) >= 2 ) //if jumped
+        		{
         
-                if(!game.hasJumpsRemaining(z, x, y))
-                {
-                    if (game.playerTurn == 1)
-                        game.playerTurn = 2;
-                    else
-                        game.playerTurn = 1;
-                }
-             }
-             else
-             {
-                  if (game.playerTurn == 1)
-                      game.playerTurn = 2;
-                 else
-                     game.playerTurn = 1;
-              }
+        			if(!game.hasJumpsRemaining(z, x, y))
+        			{
+        				if (game.playerTurn == 1)
+        					game.playerTurn = 2;
+        				else
+        					game.playerTurn = 1;
+        			}
+        		}
+        		else
+        		{
+        			if (game.playerTurn == 1)
+        				game.playerTurn = 2;
+        			else
+        				game.playerTurn = 1;
+        		}
+        	}
             
             playerturn.setText("Player " + game.playerTurn + " move");
             User_Saver one = new User_Saver(playerOne);

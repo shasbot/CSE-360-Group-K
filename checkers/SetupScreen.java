@@ -183,7 +183,6 @@ public class SetupScreen implements MouseListener
             else
             	place.removeAll();
             board.add(place);
-            System.out.println(squareData);
             x ++;
             if ( x == boardsize)
             {

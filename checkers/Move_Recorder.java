@@ -7,14 +7,12 @@ public class Move_Recorder
     private Vector<String> move_x_storage;
     private Vector<String> move_y_storage;
     private Vector<String> move_z_storage;
-    private Vector<String> move_num_storage;
 
     public Move_Recorder()
     {
       Vector move_x_storage = new Vector<String>();
       Vector move_y_storage = new Vector<String>();
       Vector move_z_storage  = new Vector<String>();
-      Vector move_num_storage = new Vector<String>();
     }
 
 
@@ -25,7 +23,7 @@ public class Move_Recorder
         move_x_storage.add(Integer.toString(x_cord));
         move_y_storage.add(Integer.toString(y_cord));
         move_z_storage.add(Integer.toString(z_cord));
-        move_num_storage.add(Integer.toString(moveNumber));
+
     }
 
 
