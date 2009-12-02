@@ -17,7 +17,7 @@ public class GameScreen implements MouseListener, ActionListener
     int size = 0;
     Game game;
     JButton saveGameButton = new JButton("Save Game");
-    JButton endMoveButton = new JButton("end king move");
+    JButton endMoveButton = new JButton("End King Move");
     int movedX,movedY,movedZ;
     
     int a,b,c,boardNumber,columns,rows;
@@ -166,6 +166,17 @@ public class GameScreen implements MouseListener, ActionListener
         		moved = true;
         		trackTurn(a,b,c,movedX,movedY,movedZ);
         	}
+        }
+        if (e.getSource() == concede)
+        {
+        	if(game.playerTurn  == 1)
+        		game.playerOnePieceCount = 0;
+        	else 
+        		game.playerTwoPieceCount = 0;
+        }
+        if (e.getSource() == draw)
+        {
+        	
         }
     }
 

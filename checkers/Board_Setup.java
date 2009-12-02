@@ -67,11 +67,13 @@ public Board_Setup(int game_size) //int ray_in[][][])
     player1_regular_to_setup = 15;
     player1_safe_zones_to_setup = 1;
     player1_mines_to_setup = 2;
+    player1_blocks_to_setup = 1;
 
     player2_kings_to_setup = 1;
     player2_regular_to_setup = 15;
     player2_safe_zones_to_setup = 1;
     player2_mines_to_setup = 2;
+    player2_blocks_to_setup = 1;
 
    }
 

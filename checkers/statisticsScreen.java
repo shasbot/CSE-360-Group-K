@@ -11,6 +11,16 @@
 
 package checkers;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author jmalmskog
@@ -32,15 +42,15 @@ public class statisticsScreen extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("Castellar", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Castellar", 1, 36));
         jLabel1.setText("Statistics");
 
         jButton1.setText("Get Stats");
@@ -50,68 +60,97 @@ public class statisticsScreen extends javax.swing.JPanel {
             }
         });
 
+        jTextField1.setText("username");
+
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jLabel4.setFont(new java.awt.Font("Ravie", 1, 14)); // NOI18N
-        jLabel4.setText("Player 1");
+        jLabel7.setFont(new java.awt.Font("Ravie", 1, 14));
+        jLabel7.setText("Player 1");
 
-        jLabel5.setFont(new java.awt.Font("Ravie", 1, 14)); // NOI18N
-        jLabel5.setText("Player 2");
+        jLabel8.setFont(new java.awt.Font("Ravie", 1, 14));
+        jLabel8.setText("Player 2");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                        .add(32, 32, 32)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel7)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel1)
+                            .add(layout.createSequentialGroup()
+                                .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(29, 29, 29)
+                                .add(jLabel8)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
+                .add(32, 32, 32))
             .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                        .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                            .add(32, 32, 32)
-                            .add(jScrollPane1))
-                        .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                            .add(48, 48, 48)
-                            .add(jLabel4)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                            .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(18, 18, 18)
-                            .add(jLabel5)
-                            .add(18, 18, 18)
-                            .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(layout.createSequentialGroup()
-                        .add(195, 195, 195)
-                        .add(jButton1))
-                    .add(layout.createSequentialGroup()
-                        .add(122, 122, 122)
-                        .add(jLabel1)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .add(183, 183, 183)
+                .add(jButton1)
+                .addContainerGap(178, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(40, 40, 40)
+                .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel7)
                     .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel4)
-                    .add(jLabel5)
-                    .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 150, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel8))
+                .add(33, 33, 33)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 154, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jButton1)
-                .addContainerGap())
+                .add(14, 14, 14))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        double [] statistics = getStats();
+        double [] statistics = null;
+        if (jTextField1.getText() != null)
+            playerOne = jTextField2.getText();
+
+        if (jTextField2.getText() != null)
+            playerTwo = jTextField1.getText();
+        try {
+            statistics = getStats();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(statisticsScreen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(statisticsScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String stats = "";
         for(int i = 0; i < 5; i++)
         {
+            if(i == 0)
+                stats = stats + "Games played: ";
+            if(i == 1)
+                stats = stats + "Games won: ";
+            if(i == 2)
+                stats = stats + "Games lost: ";
+            if(i == 3)
+                stats = stats + "Games drawn : ";
+            if(i == 4)
+            {
+                DecimalFormat twoDForm = new DecimalFormat("#.##");
+		statistics[i] = Double.valueOf(twoDForm.format(statistics[i]));
+                stats = stats + "Win Percentage: ";
+            }
+
             stats = stats + statistics[i] + "\n";
             
         }
@@ -122,64 +161,79 @@ public class statisticsScreen extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 
-    private String playerOne = null;
-    private String playerTwo = null;
-    
-    // End of variables declaration//GEN-END:variables
-
-    private double[] getStats()//returns an array of games played, won, lost, drawn, and win %
+    String playerOne = null;
+    String playerTwo = null;
+    private double[] getStats() throws FileNotFoundException, IOException//returns an array of games played, won, lost, drawn, and win %
     {
 
-        if (jTextField1.getText() != null)
-            playerOne =  jTextField1.getText();
 
-        if (jTextField2.getText() != null)
-            jTextField2.getText();
-        User_Saver one = new User_Saver(playerOne);
-        User_Saver two = new User_Saver(playerTwo);
+        
+        playerOne = "users/" + playerOne + ".txt";
+        Scanner one = new Scanner(new File(playerOne));
+        //BufferedReader one = new BufferedReader(new FileReader(playerOne));
+        //User_Saver one = new User_Saver(playerOne);
+        //User_Saver two = new User_Saver(playerTwo);
         double stats[] = new double[5];
         double gamesPlayed = 0;
         double gamesWon = 0;
         double winPercentage = 0;
         double gamesLost = 0;
         double gamesDrawn = 0;
-
-        if(playerTwo == null)
-            for(int i = 2; i<one.lines_infile(); i+=2)
+        String line = one.nextLine();line = one.nextLine();
+        System.out.println(line);
+        //System.out.println(playerTwo);
+        //System.out.println("After PlayerTwo");
+        if(playerTwo.compareTo("username") == 0){
+            System.out.println("if");
+            while(one.hasNextLine())
             {
-                System.out.println(one.get_line(i+1));
-                if(one.get_line(i+1).compareToIgnoreCase("W") == 0)
+                
+                System.out.println(line);
+                line = one.nextLine();
+                line = one.nextLine();
+                //System.out.println(line);
+                if(line.compareToIgnoreCase("W") == 0)
                     gamesWon+=1;
-                if(one.get_line(i+1).compareToIgnoreCase("L") == 0)
+                if(line.compareToIgnoreCase("L") == 0)
                     gamesLost+=1;
-                if(one.get_line(i+1).compareToIgnoreCase("D") == 0)
+                if(line.compareToIgnoreCase("D") == 0)
                     gamesDrawn+=1;
                 gamesPlayed+=1;
 
             }
-        else
-            for(int i = 2; i<one.lines_infile(); i+=2)
+        }
+        else{
+            System.out.println("else");
+            while(one.hasNextLine())
             {
-                if(one.get_line(i).compareToIgnoreCase(playerTwo) == 0)
-                {
-                    if(one.get_line(i+1).compareToIgnoreCase("W") == 0)
-                        gamesWon+=1;
-                    if(one.get_line(i+1).compareToIgnoreCase("L") == 0)
-                        gamesLost+=1;
-                    if(one.get_line(i+1).compareToIgnoreCase("D") == 0)
-                        gamesDrawn+=1;
-                    gamesPlayed+=1;
-                }
+                line = one.nextLine();
+                if(line != null)
+                if(line.compareToIgnoreCase(playerTwo) == 0)
+
+                    {
+                        line = one.nextLine();
+
+                        if(line.compareToIgnoreCase("W") == 0)
+                            gamesWon+=1;
+                        if(line.compareToIgnoreCase("L") == 0)
+                            gamesLost+=1;
+                        if(line.compareToIgnoreCase("D") == 0)
+                            gamesDrawn+=1;
+                        gamesPlayed+=1;
+
+                    }
             }
-        winPercentage = gamesWon/gamesDrawn;
+        }
+        one.close();
+        winPercentage = gamesWon/gamesPlayed;
         stats[0]=gamesPlayed;
         stats[1]=gamesWon;
         stats[2]=gamesLost;

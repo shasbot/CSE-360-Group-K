@@ -17,7 +17,7 @@ public class SetupScreen implements MouseListener
     JPanel board = new JPanel();
     JLabel prompt;
     int size;
-    int playerturn = 1;
+    int playerturn = Game.coinflip() + 1;
     int piecetype = 0;
     String promptstring = new String();
     boolean done = false;
@@ -35,7 +35,7 @@ public class SetupScreen implements MouseListener
         parent = callinggui;
 
         size = bsize;
-        prompt = new JLabel("player 1 place your safezone");
+        prompt = new JLabel("player "+ playerturn + " place your safezone");
         bsetup = new Board_Setup(size);
 
         panel = new JPanel();
@@ -79,7 +79,7 @@ public class SetupScreen implements MouseListener
             case 2:
                 placed = bsetup.place_block(playerturn, z, x, y);
                  if(bsetup.return_number_of_blocks(2) == 0)
-               {
+                 {
                     piecetype = 3;
                     promptstring = "place your king";
                  }
@@ -94,11 +94,11 @@ public class SetupScreen implements MouseListener
                break;
             case 4:
             	placed = bsetup.place_regular(playerturn, z, x, y);
-                setup_game = new Game(bsetup.temp,size,1,10);
+                setup_game = new Game(bsetup.temp,size,Game.coinflip() + 1,5);
                 if (bsetup.all_done())
                 {
                     parent.cp.remove(parent.setupscr.panel);
-                    parent.gamescr = new GameScreen(8,setup_game);
+                    parent.gamescr = new GameScreen(size,setup_game);
                     parent.cp.add(parent.gamescr.panel);
                     parent.gamescr.panel.updateUI();
                 }
@@ -129,13 +129,13 @@ public class SetupScreen implements MouseListener
        
         
     }
-     public void setupBoard(int boardsize)
+    public void setupBoard(int boardsize)
     {
         board.removeAll();
         int x = 0;
         int y = boardsize - 1;
         int z = 0;
-        Game game = new Game(bsetup.temp,size,1,5);
+        Game game = new Game(bsetup.temp,size,Game.coinflip() + 1,5);
         
         for (int i = 0; i < (boardsize * 2 * boardsize); i++)
         {
@@ -201,7 +201,7 @@ public class SetupScreen implements MouseListener
             }
 
         }
-    
+        board.updateUI();
      }
 public void mousePressed(MouseEvent e)
     {

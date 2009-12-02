@@ -152,7 +152,7 @@ public class homePageScreen extends javax.swing.JPanel {
         //f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         statisticsScreen p1 = new statisticsScreen();
         f2.getContentPane().add(p1);
-        f2.setSize(350,400);
+        f2.setSize(500,400);
         f2.setVisible(true);
         
     }//GEN-LAST:event_jButton3ActionPerformed

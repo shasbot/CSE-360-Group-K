@@ -33,9 +33,9 @@ public class Game implements java.io.Serializable
         playerTwoPieceCount = pieces;
     }
 
-    public int coinflip()
+    public static int coinflip()
     {
-        Random generator = new Random();
+        Random generator = new Random(System.currentTimeMillis());
         int result = 2;
         result = generator.nextInt(result);
         return result;
@@ -342,10 +342,10 @@ public class Game implements java.io.Serializable
     {
         boolean jumpable = false;
         if(playerTurn == 1){
-            if(isPlayerTwoPiece(boardNumber,column,row))
+            if(isPlayerTwoPiece(boardNumber,column,row) || isPlayerTwoKing(boardNumber,column,row))
                 jumpable = true;}
         else
-            if(isPlayerOnePiece(boardNumber,column,row))
+            if(isPlayerOnePiece(boardNumber,column,row) || isPlayerOneKing(boardNumber,column,row))
                 jumpable = true;
         return jumpable;
     }
