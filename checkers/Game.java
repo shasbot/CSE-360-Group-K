@@ -21,16 +21,18 @@ public class Game implements java.io.Serializable
 
     int playerOnePieceCount = 0; //Change these during board setup
     int playerTwoPieceCount = 0; //to the correct amounts.
-    static String playerOneName = "";
-    static String playerTwoName = "";
+    String playerOneName = "";
+    String playerTwoName = "";
 
-    Game(int[][][] x, int size, int turn, int pieces)
+    Game(int[][][] x, int size, int turn, int pieces, String one, String two)
     {
         board = x;
         boardsize = size;
         playerTurn = turn;
         playerOnePieceCount = pieces;
         playerTwoPieceCount = pieces;
+        playerOneName = one;
+        playerTwoName = two;
     }
 
     public static int coinflip()
@@ -915,7 +917,7 @@ public class Game implements java.io.Serializable
         return jumpExists;
     }
 
-    public static String getUserName(int x)
+    /*public static String getUserName(int x)
     {
         String y = "";
         if(x==1)
@@ -923,7 +925,7 @@ public class Game implements java.io.Serializable
         else
             y = playerTwoName;
         return y;
-    }
+    }*/
 
     // returns 0 if game is not over, 1 if Player 1 won, 2 if Player 2 won, 3 if draw
     public int gameOver()

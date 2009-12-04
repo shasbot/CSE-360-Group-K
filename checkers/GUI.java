@@ -12,11 +12,14 @@ public class GUI implements ActionListener
     Container cp;
     JButton loadGameButton = new JButton("Load Game");
     Game gamer;
+    String one;
+    String two;
 
-GUI(int bsize)
+GUI(int bsize, String playerOne, String playerTwo)
 {
 	window = new JFrame("Checkers");
 	cp = window.getContentPane();
+	one = playerOne;two = playerTwo;
 
     setupscr = new SetupScreen(bsize,this);
 
@@ -57,7 +60,7 @@ public void actionPerformed(ActionEvent event)  //important, associates ui actio
 
 public static void main (String[] args)
 {
-	GUI test = new GUI(8);
+	GUI test = new GUI(8, "asdf", "fda");
 	/*
         JFrame f1 = new JFrame("3-D Checkers");
         f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

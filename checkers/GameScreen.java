@@ -8,7 +8,7 @@ import java.io.*;
 public class GameScreen implements MouseListener, ActionListener
 {
 	JPanel panel = new JPanel();
-	JLabel playerturn = new JLabel("Player 1 move");
+	JLabel playerturn = new JLabel("");
 	JButton concede = new JButton("Concede?");
 	JButton draw = new JButton("Offer draw");	
 	Container buttoncontain = new Container();
@@ -22,8 +22,8 @@ public class GameScreen implements MouseListener, ActionListener
     
     int a,b,c,boardNumber,columns,rows;
     boolean selected = false;
-    String playerOne = Game.getUserName(1);
-    String playerTwo = Game.getUserName(2);
+    //String playerOne = Game.getUserName(1);
+    //String playerTwo = Game.getUserName(2);
     
     boolean warped = false;
 	boolean moved = false;
@@ -38,6 +38,10 @@ public class GameScreen implements MouseListener, ActionListener
 	GameScreen(int bsize, Game gameparam)
 	{
         game = gameparam;
+        if(game.playerTurn == 1)
+        	playerturn.setText(game.playerOneName + " move");
+        if(game.playerTurn == 2)
+        	playerturn.setText(game.playerTwoName + " move");
         size = bsize;
 		buttoncontain.setLayout(new GridLayout(1,0));
 		buttoncontain.add(concede);
@@ -164,7 +168,14 @@ public class GameScreen implements MouseListener, ActionListener
         	{
         		warped = true;
         		moved = true;
-        		trackTurn(a,b,c,movedX,movedY,movedZ);
+                try{ 
+                	trackTurn(a,b,c,movedX,movedY,movedZ);
+                }
+                catch(Exception except)
+                {
+               	 System.out.println("error");
+                }
+        		
         	}
         }
         if (e.getSource() == concede)
@@ -176,7 +187,9 @@ public class GameScreen implements MouseListener, ActionListener
         }
         if (e.getSource() == draw)
         {
-        	
+        	JOptionPane offer = new JOptionPane();
+        	JOptionPane.showMessageDialog(panel,"Eggs are not supposed to be green.");
+
         }
     }
 
@@ -238,7 +251,13 @@ public class GameScreen implements MouseListener, ActionListener
         	 if(!(warped && c != z) && !(moved && Math.abs(a-x) == 1))
         	 {
              game.move(c,a,b,z,x,y);// make move if move is valid
-             trackTurn(a,b,c,x,y,z);
+             try{ 
+            	 trackTurn(a,b,c,x,y,z);
+             }
+             catch(Exception e)
+             {
+            	 System.out.println("error writing stats");
+             }
              movedX = x;
              movedY = y;
              movedZ = z;
@@ -251,7 +270,7 @@ public class GameScreen implements MouseListener, ActionListener
          }
     }
 
-        public void trackTurn(int a, int b, int c, int x, int y, int z)
+        public void trackTurn(int a, int b, int c, int x, int y, int z) throws IOException
         {
 
         	if(game.isKing(z, x, y))  //does not account for newly kinged piece?
@@ -305,41 +324,50 @@ public class GameScreen implements MouseListener, ActionListener
         				game.playerTurn = 1;
         		}
         	}
-            
-            playerturn.setText("Player " + game.playerTurn + " move");
-            User_Saver one = new User_Saver(playerOne);
-            User_Saver two = new User_Saver(playerTwo);
-
+    
+        	if(game.playerTurn == 1)
+        		playerturn.setText(game.playerOneName + " move");
+        	else
+        		playerturn.setText(game.playerTwoName + " move");
+            //User_Saver one = new User_Saver(playerOne);
+            //User_Saver two = new User_Saver(playerTwo);
+            String one = "users/" + game.playerOneName + ".txt";
+            String two = "users/" + game.playerTwoName + ".txt";
+            PrintWriter outOne = new PrintWriter(new BufferedWriter(new FileWriter(one)));
+            PrintWriter outTwo = new PrintWriter(new BufferedWriter(new FileWriter(two)));
+   
 
             int playerwin = game.gameOver();
             if (playerwin != 0)
             {
-                String win = "W";String lose = "L";String draw = "D";
+                //String win = "W";String lose = "L";String draw = "D";
                 playerturn.setText("Player" + playerwin + " wins");
                 if (playerwin == 3)
                 {
                     playerturn.setText("Tie Game");
-                    one.add_to_stats(playerTwo);
-                    one.add_to_stats("draw");
-                    two.add_to_stats(playerOne);
-                    two.add_to_stats("draw");
+                    outOne.print(game.playerTwoName + "\n");
+                    outOne.print("D\n");
+                    outTwo.print(game.playerOneName + "\n");
+                    outTwo.print("D\n");
                 }
                 if (playerwin == 1)
                 {
-                   one.add_to_stats(playerTwo);
-                   one.add_to_stats("win");
-                   two.add_to_stats(playerOne);
-                   two.add_to_stats("lose");
+                   outOne.print(game.playerTwoName + "\n");
+                   outOne.print("W\n");
+                   outTwo.print(game.playerOneName + "\n");
+                   outTwo.print("L\n");
                 }
                 if (playerwin == 2)
                 {
-                   one.add_to_stats(playerTwo);
-                   one.add_to_stats("lose");
-                   two.add_to_stats(playerOne);
-                   two.add_to_stats("win");
+                   outOne.print(game.playerTwoName + "\n");
+                   outOne.print("L\n");
+                   outTwo.print(game.playerOneName + "\n");
+                   outTwo.print("W\n");
                 }
 
             }
+            outOne.close();
+            outTwo.close();
 
         }
 

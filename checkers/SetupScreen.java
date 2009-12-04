@@ -61,7 +61,7 @@ public class SetupScreen implements MouseListener
             case 0:
                 placed = bsetup.place_safe_zone(playerturn, z, x, y);
                 promptstring = "place your safezone";
-                if(bsetup.return_number_of_safe_zones(2) == 0)
+                if(bsetup.return_number_of_safe_zones(2) == 0 && bsetup.return_number_of_safe_zones(1) == 0)
                 {
                     piecetype = 1;
                     promptstring = "place your mine";
@@ -69,7 +69,7 @@ public class SetupScreen implements MouseListener
                 break;
             case 1:
             	placed = bsetup.place_mines(playerturn, z, x, y);
-                 if(bsetup.return_number_of_mines_to_setup(2) == 0)
+                 if(bsetup.return_number_of_mines_to_setup(2) == 0 && bsetup.return_number_of_mines_to_setup(1) == 0)
                  {
                     piecetype = 2;
                     promptstring = "place your block";
@@ -78,7 +78,7 @@ public class SetupScreen implements MouseListener
     
             case 2:
                 placed = bsetup.place_block(playerturn, z, x, y);
-                 if(bsetup.return_number_of_blocks(2) == 0)
+                 if(bsetup.return_number_of_blocks(2) == 0 && bsetup.return_number_of_blocks(1) == 0)
                  {
                     piecetype = 3;
                     promptstring = "place your king";
@@ -86,7 +86,7 @@ public class SetupScreen implements MouseListener
                 break;
             case 3:
             	placed = bsetup.place_king(playerturn, z, x, y);
-                if(bsetup.return_number_of_kings(2) == 0)
+                if(bsetup.return_number_of_kings(2) == 0 && bsetup.return_number_of_kings(1) == 0)
                 {
                    piecetype = 4;
                    promptstring = "place your piece";
@@ -94,7 +94,7 @@ public class SetupScreen implements MouseListener
                break;
             case 4:
             	placed = bsetup.place_regular(playerturn, z, x, y);
-                setup_game = new Game(bsetup.temp,size,Game.coinflip() + 1,5);
+                setup_game = new Game(bsetup.temp,size,Game.coinflip() + 1,5,parent.one,parent.two);
                 if (bsetup.all_done())
                 {
                     parent.cp.remove(parent.setupscr.panel);
@@ -135,7 +135,7 @@ public class SetupScreen implements MouseListener
         int x = 0;
         int y = boardsize - 1;
         int z = 0;
-        Game game = new Game(bsetup.temp,size,Game.coinflip() + 1,5);
+        Game game = new Game(bsetup.temp,size,Game.coinflip() + 1,6, "", "");
         
         for (int i = 0; i < (boardsize * 2 * boardsize); i++)
         {

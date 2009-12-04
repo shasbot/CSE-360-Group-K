@@ -67,73 +67,136 @@ public class statisticsScreen extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel7.setFont(new java.awt.Font("Ravie", 1, 14));
-        jLabel7.setText("Player 1");
+        jLabel7.setText("Statistics for:");
 
         jLabel8.setFont(new java.awt.Font("Ravie", 1, 14));
-        jLabel8.setText("Player 2");
+        jLabel8.setText("Compared to:");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(32, 32, 32)
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jLabel7)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel1)
-                            .add(layout.createSequentialGroup()
-                                .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(29, 29, 29)
-                                .add(jLabel8)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
-                .add(32, 32, 32))
             .add(layout.createSequentialGroup()
-                .add(183, 183, 183)
-                .add(jButton1)
-                .addContainerGap(178, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(83, 83, 83)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 324, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
+                        .add(120, 120, 120)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(jLabel8)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(jLabel7)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(jLabel1)))
+                    .add(layout.createSequentialGroup()
+                        .add(207, 207, 207)
+                        .add(jButton1)))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .add(11, 11, 11)
                 .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel7)
-                    .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel8))
-                .add(33, 33, 33)
+                    .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(7, 7, 7)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel8)
+                    .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 154, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
-                .add(jButton1)
-                .add(14, 14, 14))
+                .add(jButton1))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         double [] statistics = null;
-        if (jTextField1.getText() != null)
-            playerOne = jTextField2.getText();
-
+        //boolean flag = false;
+        String one = "";
+        String two = "";
+        Boolean flag1 = false;
+        //File fileTwo;
         if (jTextField2.getText() != null)
+        {
+            playerOne = jTextField2.getText();
+            one = playerOne;
+        }
+
+        if (jTextField1.getText() != null)
+        {
             playerTwo = jTextField1.getText();
+            two = playerTwo;
+
+            /*****************/
+            if(jTextField1.getText().compareTo("username")!= 0)
+                playerTwo1 = playerTwo;
+            //System.out.println(playerTwo1);
+            /************/
+        }
+
         try {
-            statistics = getStats();
+            //playerTwo = "users/" + playerTwo + ".txt";
+            File fileTwo = new File(playerTwo);
+            File fileOne = new File(playerOne);
+            file = new File("users/" + playerTwo1 + ".txt");
+            file1 = new File("users/" + playerOne + ".txt");
+            //File fileTwo1 = new File(playerTwo1);
+
+            //fileTwo = new File(playerTwo);
+            //System.out.println(file.exists());
+            /*********************************** */
+            flag1 = false;
+            if(file.exists())
+            {
+                flag1 = true;
+                System.out.println("IF IF TRUE TRUE");
+            }
+            else
+            {
+                System.out.println("ELSE ELSE FALSE FALSE");
+                if(jTextField1.getText().compareTo("username")==0)
+                    flag1 = true;
+                else
+                    flag1 = false;
+            }
+            if(playerOne.compareToIgnoreCase(playerTwo) == 0)
+                flag1 = false;
+            /***********************************/
+            System.out.println(flag1);
+            System.out.println(file1.exists());
+
+            //if(playerOne != null && flag1)
+
+            if(file1.exists() && flag1)
+            {
+                //System.out.println("in if");
+              statistics = getStats();
+            }
+            else
+            {
+                if(!file1.exists())
+                    flag = true;
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(statisticsScreen.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(statisticsScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String stats = "";
+        //File fileThree = new File(playerTwo);
+        stats = "";
+        
+        if(flag1 && file1.exists())
+        {
         for(int i = 0; i < 5; i++)
         {
             if(i == 0)
@@ -147,13 +210,29 @@ public class statisticsScreen extends javax.swing.JPanel {
             if(i == 4)
             {
                 DecimalFormat twoDForm = new DecimalFormat("#.##");
-		statistics[i] = Double.valueOf(twoDForm.format(statistics[i]));
+                //if(statistics[i])
+                    statistics[i] = Double.valueOf(twoDForm.format(statistics[i]));
                 stats = stats + "Win Percentage: ";
             }
 
+            
+
             stats = stats + statistics[i] + "\n";
             
-        }
+            
+            }
+        
+       }
+        else
+            if(flag)
+                stats = "Invalid user.";
+            else
+                stats = "Invalid. Enter valid player to compare to or type \"username\"";
+            /*************************/
+        
+        File fileOne = new File(playerOne);
+        if(!fileOne.exists() && stats.compareTo("Invalid. Enter valid player to compare to or type \"username\"") != 0)
+            stats = "Invalid user.";
         jTextArea1.setText(stats);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -171,32 +250,44 @@ public class statisticsScreen extends javax.swing.JPanel {
 
     String playerOne = null;
     String playerTwo = null;
+    String playerTwo1 = null;
+    boolean flag = false;
+    File file;
+    File file1;
+    String stats;
     private double[] getStats() throws FileNotFoundException, IOException//returns an array of games played, won, lost, drawn, and win %
     {
-
-
-        
-        playerOne = "users/" + playerOne + ".txt";
-        Scanner one = new Scanner(new File(playerOne));
-        //BufferedReader one = new BufferedReader(new FileReader(playerOne));
-        //User_Saver one = new User_Saver(playerOne);
-        //User_Saver two = new User_Saver(playerTwo);
         double stats[] = new double[5];
+        stats[0]=0;stats[1]=0;stats[2]=0;stats[3]=0;stats[4]=0;
         double gamesPlayed = 0;
         double gamesWon = 0;
         double winPercentage = 0;
         double gamesLost = 0;
         double gamesDrawn = 0;
+
+
+        
+        if(playerOne.compareTo("") != 0)
+        {
+        playerOne = "users/" + playerOne + ".txt";
+        
+        Scanner one = new Scanner(new File(playerOne));
+        //BufferedReader one = new BufferedReader(new FileReader(playerOne));
+        //User_Saver one = new User_Saver(playerOne);
+        //User_Saver two = new User_Saver(playerTwo);
+        
         String line = one.nextLine();line = one.nextLine();
-        System.out.println(line);
+        //System.out.println(line);
         //System.out.println(playerTwo);
         //System.out.println("After PlayerTwo");
+        
+        File fileTwo = new File(playerTwo);
         if(playerTwo.compareTo("username") == 0){
             System.out.println("if");
             while(one.hasNextLine())
             {
                 
-                System.out.println(line);
+                //System.out.println(line);
                 line = one.nextLine();
                 line = one.nextLine();
                 //System.out.println(line);
@@ -210,10 +301,14 @@ public class statisticsScreen extends javax.swing.JPanel {
 
             }
         }
-        else{
-            System.out.println("else");
-            while(one.hasNextLine())
+        else
+        {
+            System.out.println("get stats");
+            if(file.exists())
             {
+             System.out.println("else");
+                while(one.hasNextLine())
+                {
                 line = one.nextLine();
                 if(line != null)
                 if(line.compareToIgnoreCase(playerTwo) == 0)
@@ -230,6 +325,7 @@ public class statisticsScreen extends javax.swing.JPanel {
                         gamesPlayed+=1;
 
                     }
+                }
             }
         }
         one.close();
@@ -239,8 +335,13 @@ public class statisticsScreen extends javax.swing.JPanel {
         stats[2]=gamesLost;
         stats[3]=gamesDrawn;
         stats[4]=winPercentage;
+        }
+        
+        else
+            flag = true;
 
         return stats;
+        
 
     }
 
