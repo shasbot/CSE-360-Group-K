@@ -46,13 +46,13 @@ public Board_Setup(int game_size) //int ray_in[][][])
    if(game_size == 8)
    {
     player1_kings_to_setup = 1;
-    player1_regular_to_setup = 5;   // should be 10, testing
+    player1_regular_to_setup = 10;   
     player1_safe_zones_to_setup = 1;
     player1_mines_to_setup = 1;
     player1_blocks_to_setup = 1;
 
     player2_kings_to_setup = 1;
-    player2_regular_to_setup = 5;    // should be 10, testing
+    player2_regular_to_setup = 10;    
     player2_safe_zones_to_setup = 1;
     player2_mines_to_setup = 1;
     player2_blocks_to_setup = 1;

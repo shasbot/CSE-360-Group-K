@@ -191,7 +191,7 @@ public class playerLoginScreen2 extends javax.swing.JPanel {
 
             if(passTwo.compareTo(actualPassTwo) == 0 && passOne.compareTo(actualPassOne) == 0)
             {
-                GUI test = new GUI(10, jTextField1.getText(), jTextField2.getText());
+                GUI test = new GUI(10, jTextField1.getText(), jTextField3.getText());
             }
             if(passTwo.compareTo(actualPassTwo) != 0)
                 jLabel9.setText("Invalid Password.");

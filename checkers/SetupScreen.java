@@ -5,11 +5,14 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 /**
  *
  * @author shasbot
  */
-public class SetupScreen implements MouseListener
+public class SetupScreen implements MouseListener,ActionListener
 {
     Game setup_game;
     Board_Setup bsetup;
@@ -22,7 +25,11 @@ public class SetupScreen implements MouseListener
     String promptstring = new String();
     boolean done = false;
     GUI parent;
-
+    
+    JButton loadgame = new JButton("Load Game");
+    JButton random = new JButton("Random Setup");
+   
+    
     ImageIcon whitePiece = new ImageIcon("pieces/whitepiece.png");
     ImageIcon whiteKing = new ImageIcon("pieces/whiteking.png");
     ImageIcon whiteBlock = new ImageIcon("pieces/whiteblock.png"); 
@@ -48,9 +55,50 @@ public class SetupScreen implements MouseListener
         setupBoard(size);
         board.addMouseListener(this);
 
+        Container buttoncontain = new Container();
+        buttoncontain.setLayout(new GridLayout(1,0));
+        buttoncontain.add(loadgame);
+        buttoncontain.add(random);
+        
+        loadgame.addActionListener(this);
+        random.addActionListener(this);
+        
         panel.add(prompt, BorderLayout.NORTH);
         panel.add(board, BorderLayout.CENTER);
+        panel.add(buttoncontain,BorderLayout.SOUTH);
     
+    }
+    
+    public void actionPerformed(ActionEvent e)
+    {
+    	
+    	if(e.getSource() == loadgame)
+    	{
+            try
+            {
+              System.out.println("game being read");
+              ObjectInputStream gameloader = new ObjectInputStream(new FileInputStream("savedgames/"+ parent.one + "vs" + parent.two));
+              setup_game = (Game)gameloader.readObject();
+              gameloader.close();
+              parent.cp.remove(parent.setupscr.panel);
+              parent.gamescr = new GameScreen(size,setup_game);
+              parent.cp.add(parent.gamescr.panel);
+              parent.gamescr.panel.updateUI();
+              File savefile = new File("savedgames/"+ parent.one + "vs" + parent.two);
+             // if(savefile.exists())
+            	 // savefile.delete();
+              
+            }
+            catch(Exception except)
+            {
+                System.out.println("error reading file");
+            }
+    	}
+    	if(e.getSource() == random)
+    	{
+    		
+    	}
+    	
     }
     public void squareClicked(int x, int y, int z)
     {
@@ -94,7 +142,7 @@ public class SetupScreen implements MouseListener
                break;
             case 4:
             	placed = bsetup.place_regular(playerturn, z, x, y);
-                setup_game = new Game(bsetup.temp,size,Game.coinflip() + 1,5,parent.one,parent.two);
+                setup_game = new Game(bsetup.temp,size,Game.coinflip() + 1,6,parent.one,parent.two);
                 if (bsetup.all_done())
                 {
                     parent.cp.remove(parent.setupscr.panel);

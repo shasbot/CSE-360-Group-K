@@ -29,8 +29,16 @@ public class Game implements java.io.Serializable
         board = x;
         boardsize = size;
         playerTurn = turn;
-        playerOnePieceCount = pieces;
-        playerTwoPieceCount = pieces;
+        if(size == 8)
+        {
+        	playerOnePieceCount = 11;
+        	playerTwoPieceCount = 11;
+        }
+        else
+        {
+            playerOnePieceCount = 16;
+            playerTwoPieceCount = 16;
+        }
         playerOneName = one;
         playerTwoName = two;
     }

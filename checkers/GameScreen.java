@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import java.awt.event.*;
 import java.io.*;
+import java.util.LinkedList;
 
 public class GameScreen implements MouseListener, ActionListener
 {
@@ -19,6 +20,11 @@ public class GameScreen implements MouseListener, ActionListener
     JButton saveGameButton = new JButton("Save Game");
     JButton endMoveButton = new JButton("End King Move");
     int movedX,movedY,movedZ;
+    JButton instantReplay = new JButton("Instant Replay");
+    LinkedList instantReplayList = new LinkedList();
+    
+    boolean replaymode = false;
+    int replayMoves;
     
     int a,b,c,boardNumber,columns,rows;
     boolean selected = false;
@@ -35,6 +41,8 @@ public class GameScreen implements MouseListener, ActionListener
     ImageIcon blackKing = new ImageIcon("pieces/blackking.png"); 
     ImageIcon blackBlock = new ImageIcon("pieces/blackblock.png"); 
     
+    Game gameStore;
+    
 	GameScreen(int bsize, Game gameparam)
 	{
         game = gameparam;
@@ -48,9 +56,13 @@ public class GameScreen implements MouseListener, ActionListener
 		buttoncontain.add(draw);
         buttoncontain.add(saveGameButton);
         buttoncontain.add(endMoveButton);
+        buttoncontain.add(instantReplay);
 
         saveGameButton.addActionListener(this);
         endMoveButton.addActionListener(this);
+        draw.addActionListener(this);
+        concede.addActionListener(this);
+        instantReplay.addActionListener(this);
 
 		panel.setLayout(new BorderLayout());
 		panel.add(playerturn,BorderLayout.PAGE_START);	
@@ -153,9 +165,10 @@ public class GameScreen implements MouseListener, ActionListener
             try
             {
               System.out.println("game being written");
-              ObjectOutputStream gamesaver = new ObjectOutputStream(new FileOutputStream("savedgame"));
+              ObjectOutputStream gamesaver = new ObjectOutputStream(new FileOutputStream("savedgames/"+ game.playerOneName + "vs" + game.playerTwoName));
               gamesaver.writeObject(game);
               gamesaver.close();
+              System.exit(0);
             }
             catch(IOException except)
             {
@@ -181,15 +194,95 @@ public class GameScreen implements MouseListener, ActionListener
         if (e.getSource() == concede)
         {
         	if(game.playerTurn  == 1)
+        	{
         		game.playerOnePieceCount = 0;
+        		try{
+            		
+                	
+                	trackTurn(0,0,0,0,0,0);
+                	}
+                	catch(Exception excp)
+                	{
+                		System.out.println("error writing stats file");
+                	}
+        	}
         	else 
+        	{
         		game.playerTwoPieceCount = 0;
+        		try{
+            		
+                	
+                	trackTurn(0,0,0,0,0,0);
+                	}
+                	catch(Exception excp)
+                	{
+                		System.out.println("error writing stats file");
+                	}
+        	}
         }
         if (e.getSource() == draw)
         {
-        	JOptionPane offer = new JOptionPane();
-        	JOptionPane.showMessageDialog(panel,"Eggs are not supposed to be green.");
+      
+        	int draw = JOptionPane.showConfirmDialog(null, "Accept draw?", "Draw", JOptionPane.YES_NO_OPTION);
+            if (draw == JOptionPane.YES_OPTION)
+            {
+            	game.playerOnePieceCount = 0;
+            	game.playerTwoPieceCount = 0;
+            	try{
+            		
+            	
+            	trackTurn(0,0,0,0,0,0);
+            	}
+            	catch(Exception excp)
+            	{
+            		System.out.println("error writing stats file");
+            	}
+            }
 
+        
+
+        }
+        if (e.getSource() == instantReplay)
+        {
+        	if(!replaymode)
+        	{
+        		String replaymovestring = JOptionPane.showInputDialog(null, "How many moves do you want to replay?", "Instant Replay");
+        		replayMoves = Integer.parseInt(replaymovestring);            
+        		if(instantReplayList.size() >= replayMoves)
+            	{
+            		game = (Game)instantReplayList.get(instantReplayList.size() - replayMoves);
+        			gameStore = game;
+        			//game = (Game)instantReplayList.get(4);
+        			setupBoard(size);
+            		panel.updateUI();
+            		replaymode = true;
+            		instantReplay.setText("Next Move");
+            	}
+        	}
+        	else
+        	{
+        		replayMoves --;
+        		if(replayMoves != 0)
+        		{
+        			//game = (Game)instantReplayList.get(4);
+        			game = (Game)instantReplayList.get(instantReplayList.size() - replayMoves);
+        			//game = new Game(new int[10][10][10],8,1,8,"","");
+        			if(game.board == gameStore.board)
+        				System.out.println("Should be working");
+        			setupBoard(size);
+        			panel.updateUI();
+        		}
+        		else
+        		{
+        			replaymode = false;
+        			instantReplay.setText("Instant Replay");
+        			game = gameStore;
+        		}
+        		
+        	}
+            	
+        	
+        	
         }
     }
 
@@ -263,6 +356,10 @@ public class GameScreen implements MouseListener, ActionListener
              movedZ = z;
         	 }
              setupBoard(size);
+           
+             instantReplayList.add(new Game(game.board,game.boardsize,game.playerTurn,8,game.playerOneName,game.playerTwoName));
+             //instantReplayList.add();
+             System.out.println(instantReplayList.size());
          }
          else
          {
@@ -323,8 +420,10 @@ public class GameScreen implements MouseListener, ActionListener
         			else
         				game.playerTurn = 1;
         		}
+        		
         	}
-    
+        	
+        	
         	if(game.playerTurn == 1)
         		playerturn.setText(game.playerOneName + " move");
         	else
@@ -333,8 +432,12 @@ public class GameScreen implements MouseListener, ActionListener
             //User_Saver two = new User_Saver(playerTwo);
             String one = "users/" + game.playerOneName + ".txt";
             String two = "users/" + game.playerTwoName + ".txt";
-            PrintWriter outOne = new PrintWriter(new BufferedWriter(new FileWriter(one)));
-            PrintWriter outTwo = new PrintWriter(new BufferedWriter(new FileWriter(two)));
+            FileOutputStream fileOutOne = new FileOutputStream(one,true); 
+            FileOutputStream fileOutTwo = new FileOutputStream(two,true);
+            DataOutputStream outOne   = new DataOutputStream(fileOutOne); 
+            DataOutputStream outTwo   = new DataOutputStream(fileOutTwo); 
+            //PrintWriter outOne = new PrintWriter(new BufferedWriter(new FileWriter(one)));
+            //PrintWriter outTwo = new PrintWriter(new BufferedWriter(new FileWriter(two)));
    
 
             int playerwin = game.gameOver();
@@ -345,26 +448,27 @@ public class GameScreen implements MouseListener, ActionListener
                 if (playerwin == 3)
                 {
                     playerturn.setText("Tie Game");
-                    outOne.print(game.playerTwoName + "\n");
-                    outOne.print("D\n");
-                    outTwo.print(game.playerOneName + "\n");
-                    outTwo.print("D\n");
+                    outOne.writeBytes(game.playerTwoName + "\n");
+                    outOne.writeBytes("D\n");
+                    outTwo.writeBytes(game.playerOneName + "\n");
+                    outTwo.writeBytes("D\n");
                 }
                 if (playerwin == 1)
                 {
-                   outOne.print(game.playerTwoName + "\n");
-                   outOne.print("W\n");
-                   outTwo.print(game.playerOneName + "\n");
-                   outTwo.print("L\n");
+                   outOne.writeBytes(game.playerTwoName + "\n");
+                   outOne.writeBytes("W\n");
+                   outTwo.writeBytes(game.playerOneName + "\n");
+                   outTwo.writeBytes("L\n");
                 }
                 if (playerwin == 2)
                 {
-                   outOne.print(game.playerTwoName + "\n");
-                   outOne.print("L\n");
-                   outTwo.print(game.playerOneName + "\n");
-                   outTwo.print("W\n");
+                   outOne.writeBytes(game.playerTwoName + "\n");
+                   outOne.writeBytes("L\n");
+                   outTwo.writeBytes(game.playerOneName + "\n");
+                   outTwo.writeBytes("W\n");
                 }
-
+                
+                System.exit(0);
             }
             outOne.close();
             outTwo.close();
