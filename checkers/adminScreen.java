@@ -10,18 +10,36 @@
  */
 
 package checkers;
-
+import java.io.File;
 /**
  *
  * @author jmalmskog
  */
-public class adminScreen extends javax.swing.JPanel {
+public class adminScreen extends javax.swing.JPanel
+{
 
     /** Creates new form adminScreen */
-    public adminScreen() {
+    public adminScreen()
+    {
         initComponents();
+        update_textarea();
     }
 
+    public void update_textarea()
+    {
+    File folder = new File("C://users//");
+    File[] listOfFiles = folder.listFiles();
+    String temp = "";
+    for (int i = 0; i < listOfFiles.length; i++)
+          {
+            if (listOfFiles[i].isFile())
+             {
+            temp += listOfFiles[i].getName()+ "\n";
+              }
+           }
+     temp = temp.substring(0, temp.length()-2);
+     current_users.append(temp);
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -36,7 +54,7 @@ public class adminScreen extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        current_users = new javax.swing.JTextArea();
 
         jLabel1.setFont(new java.awt.Font("Castellar", 1, 36));
         jLabel1.setText("Administration");
@@ -48,9 +66,9 @@ public class adminScreen extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Ravie", 1, 14));
         jLabel2.setText("Tools");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        current_users.setColumns(20);
+        current_users.setRows(5);
+        jScrollPane1.setViewportView(current_users);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -91,12 +109,13 @@ public class adminScreen extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea current_users;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
+
 
 }
