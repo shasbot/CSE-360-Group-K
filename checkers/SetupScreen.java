@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+
 /**
  *
  * @author shasbot
@@ -66,6 +67,11 @@ public class SetupScreen implements MouseListener,ActionListener
         panel.add(prompt, BorderLayout.NORTH);
         panel.add(board, BorderLayout.CENTER);
         panel.add(buttoncontain,BorderLayout.SOUTH);
+        panel.updateUI();
+        //parent.cp.update(parent.cp.getGraphics());
+        parent.window.setSize(1,1);
+        parent.window.setSize(parent.window.getSize());
+        panel.updateUI();
     
     }
     
@@ -96,7 +102,12 @@ public class SetupScreen implements MouseListener,ActionListener
     	}
     	if(e.getSource() == random)
     	{
-    		
+    		bsetup.randomSetup();    	
+    		setup_game = new Game(bsetup.temp,size,Game.coinflip() + 1,6,parent.one,parent.two);
+    		parent.cp.remove(parent.setupscr.panel);
+            parent.gamescr = new GameScreen(size,setup_game);
+            parent.cp.add(parent.gamescr.panel);
+            parent.gamescr.panel.updateUI();
     	}
     	
     }

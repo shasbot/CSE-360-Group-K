@@ -294,7 +294,7 @@ public class Game implements java.io.Serializable
     public boolean isPlayerOnePiece(int boardNumber, int column, int row)
     {
         boolean piece = false;
-        if(board[boardNumber][column][row] == 1 || board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 7 || board[boardNumber][column][row] == 22 || board[boardNumber][column][row] == 24)
+        if(board[boardNumber][column][row] == 1 || board[boardNumber][column][row] == 5 || board[boardNumber][column][row] == 7 || board[boardNumber][column][row] == 22)
             piece = true;
         return piece;
 
@@ -303,7 +303,7 @@ public class Game implements java.io.Serializable
     public boolean isPlayerTwoPiece(int boardNumber, int column, int row)
     {
         boolean piece = false;
-        if(board[boardNumber][column][row] == 9 || board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 15 || board[boardNumber][column][row] == 23 || board[boardNumber][column][row] == 25)
+        if(board[boardNumber][column][row] == 9 || board[boardNumber][column][row] == 13 || board[boardNumber][column][row] == 15 || board[boardNumber][column][row] == 23)
             piece = true;
         return piece;
     }
@@ -599,15 +599,15 @@ public class Game implements java.io.Serializable
 
                         if(isPiece(boardNumber, columns, rows)) //for regular pieces for Player 1
                         {
-                            if(offTopEdge(boardNumber, columns, rows))
+                            if(offBottomEdge(boardNumber, columns, rows))
                             {
-                                if((byLeftEdge(boardNumber, columns, rows) || onLeftEdge(boardNumber, columns, rows)) && offTopEdge(boardNumber,columns,rows))
+                                if((byLeftEdge(boardNumber, columns, rows) || onLeftEdge(boardNumber, columns, rows)) && offBottomEdge(boardNumber,columns,rows))
                                     if(isJumpable(boardNumber, columns+1, rows-1) && isEmpty(boardNumber, columns+2, rows-2))
                                         jumpExists = true;
-                                if((byRightEdge(boardNumber, columns, rows) || onRightEdge(boardNumber, columns, rows)) && offTopEdge(boardNumber,columns,rows))
+                                if((byRightEdge(boardNumber, columns, rows) || onRightEdge(boardNumber, columns, rows)) && offBottomEdge(boardNumber,columns,rows))
                                     if(isJumpable(boardNumber, columns-1, rows-1) && isEmpty(boardNumber, columns-2, rows-2))
                                         jumpExists = true;
-                                if((offLeftEdge(boardNumber, columns, rows) && offRightEdge(boardNumber, columns, rows)) && offTopEdge(boardNumber,columns,rows))
+                                if((offLeftEdge(boardNumber, columns, rows) && offRightEdge(boardNumber, columns, rows)) && offBottomEdge(boardNumber,columns,rows))
                                 {
                                     if(isJumpable(boardNumber, columns+1, rows-1) && isEmpty(boardNumber, columns+2, rows-2))
                                         jumpExists = true;

@@ -21,7 +21,8 @@ public class GameScreen implements MouseListener, ActionListener
     JButton endMoveButton = new JButton("End King Move");
     int movedX,movedY,movedZ;
     JButton instantReplay = new JButton("Instant Replay");
-    LinkedList instantReplayList = new LinkedList();
+    //LinkedList instantReplayList = new LinkedList();
+    int movesPlayed = 0;
     
     boolean replaymode = false;
     int replayMoves;
@@ -107,7 +108,7 @@ public class GameScreen implements MouseListener, ActionListener
                 else
                     place.setBackground(Color.RED);
             }
-            if (game.isSafe(z, x, y) || game.board[z][x][y] == 20 || game.board[z][x][y] == 21 )
+            if (game.isSafe(z, x, y) || game.board[z][x][y] == 20 || game.board[z][x][y] == 21 || game.board[z][x][y] == 24 || game.board[z][x][y] == 25 )
             {
             	place.setBackground(Color.ORANGE);
             }
@@ -248,15 +249,33 @@ public class GameScreen implements MouseListener, ActionListener
         	{
         		String replaymovestring = JOptionPane.showInputDialog(null, "How many moves do you want to replay?", "Instant Replay");
         		replayMoves = Integer.parseInt(replaymovestring);            
-        		if(instantReplayList.size() >= replayMoves)
+        		if(movesPlayed >= replayMoves)
             	{
-            		game = (Game)instantReplayList.get(instantReplayList.size() - replayMoves);
+        			try
+                    {
+                      System.out.println("game being read");
+                      String gameStatePath = "gamestates/" + (movesPlayed - replayMoves);
+                      ObjectInputStream gameloader = new ObjectInputStream(new FileInputStream(gameStatePath));
+                      game = (Game)gameloader.readObject();
+                      gameloader.close();
+                      setupBoard(size);
+                      panel.updateUI();
+                      
+                      
+                    }
+                    catch(Exception except)
+                    {
+                        System.out.println("error reading gamestate");
+                    }
+            		/*game = (Game)instantReplayList.get(instantReplayList.size() - replayMoves);
         			gameStore = game;
         			//game = (Game)instantReplayList.get(4);
         			setupBoard(size);
             		panel.updateUI();
+            		*/
             		replaymode = true;
             		instantReplay.setText("Next Move");
+            		
             	}
         	}
         	else
@@ -264,11 +283,26 @@ public class GameScreen implements MouseListener, ActionListener
         		replayMoves --;
         		if(replayMoves != 0)
         		{
-        			//game = (Game)instantReplayList.get(4);
+        			try
+                    {
+                      System.out.println("game being read");
+                      String gameStatePath = "gamestates/" + (movesPlayed - replayMoves);
+                      ObjectInputStream gameloader = new ObjectInputStream(new FileInputStream(gameStatePath));
+                      game = (Game)gameloader.readObject();
+                      gameloader.close();
+                      
+                      
+                    }
+                    catch(Exception except)
+                    {
+                        System.out.println("error reading gamestate");
+                    }
+        			/*//game = (Game)instantReplayList.get(4);
         			game = (Game)instantReplayList.get(instantReplayList.size() - replayMoves);
         			//game = new Game(new int[10][10][10],8,1,8,"","");
         			if(game.board == gameStore.board)
         				System.out.println("Should be working");
+        				*/
         			setupBoard(size);
         			panel.updateUI();
         		}
@@ -276,7 +310,7 @@ public class GameScreen implements MouseListener, ActionListener
         		{
         			replaymode = false;
         			instantReplay.setText("Instant Replay");
-        			game = gameStore;
+        			//game = gameStore;
         		}
         		
         	}
@@ -357,9 +391,20 @@ public class GameScreen implements MouseListener, ActionListener
         	 }
              setupBoard(size);
            
-             instantReplayList.add(new Game(game.board,game.boardsize,game.playerTurn,8,game.playerOneName,game.playerTwoName));
-             //instantReplayList.add();
-             System.out.println(instantReplayList.size());
+             try
+             {
+               System.out.println("gamestate being written");
+               String gameStatePath = "gamestates/" + movesPlayed;
+               ObjectOutputStream replaysaver = new ObjectOutputStream(new FileOutputStream(gameStatePath));
+               replaysaver.writeObject(game);
+               replaysaver.close();
+               movesPlayed ++;
+             }
+             catch(IOException except)
+             {
+                 System.out.println("error writing gamestate");
+             }
+             System.out.println(game.board[z][x][y]);
          }
          else
          {
@@ -467,7 +512,13 @@ public class GameScreen implements MouseListener, ActionListener
                    outTwo.writeBytes(game.playerOneName + "\n");
                    outTwo.writeBytes("W\n");
                 }
-                
+                for(int i = 0; i < movesPlayed; i++)
+                {
+                	String gameStatePath = "gamestates/" + i;
+                	File toDelete = new File(gameStatePath);
+                	if(toDelete.exists())
+                		toDelete.delete();
+                }
                 System.exit(0);
             }
             outOne.close();

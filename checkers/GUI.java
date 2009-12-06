@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.io.*;
 public class GUI implements ActionListener 
 {
-	private JFrame window;
+	protected JFrame window;
 	public GameScreen gamescr;
     public SetupScreen setupscr;
     Container cp;

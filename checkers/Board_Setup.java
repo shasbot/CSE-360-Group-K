@@ -1,5 +1,7 @@
 package checkers;
 
+import java.util.Random;
+
 /*----------------------------------------------------
  *----------------------------------------------------
  * ------------- Piece dictionary---------------------
@@ -444,16 +446,54 @@ public boolean all_done()
        player1_regular_to_setup == 0 &&
        player1_safe_zones_to_setup == 0 &&
        player1_mines_to_setup == 0 &&
+       player1_blocks_to_setup == 0 &&
 
        player2_kings_to_setup == 0 &&
        player2_regular_to_setup == 0 &&
        player2_safe_zones_to_setup == 0 &&
-       player2_mines_to_setup == 0
+       player2_mines_to_setup == 0 &&
+       player2_blocks_to_setup == 0 
        )
     {
     done = true;
     }
     return done;
+}
+
+public void randomSetup()
+{
+	Random generator = new Random(System.currentTimeMillis());
+    while(!all_done())
+    {
+    	//int result = boardSize;
+        //result = generator.nextInt(result);
+        while(return_number_of_safe_zones(1) != 0)
+        	place_safe_zone(1,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_mines_to_setup(1) != 0)
+        	place_mines(1,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_blocks(1) != 0)
+        	place_block(1,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_kings(1) != 0)
+        	place_king(1,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_regular(1) != 0)
+        	place_regular(1,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        ///////////////
+        while(return_number_of_safe_zones(2) != 0)
+        	place_safe_zone(2,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_mines_to_setup(2) != 0)
+        	place_mines(2,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_blocks(2) != 0)
+        	place_block(2,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_kings(2) != 0)
+        	place_king(2,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+        while(return_number_of_regular(2) != 0)
+        	place_regular(2,generator.nextInt(2),generator.nextInt(boardSize),generator.nextInt(boardSize));
+                	
+        	
+        	
+        	
+        	
+    }
 }
 
 }
