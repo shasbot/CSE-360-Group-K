@@ -10,6 +10,7 @@ public class User_Saver
   private File file;
   private int line_counter;
   private Vector<String> temp_storage;
+  private String directory_and_file_name;
 
 
  public User_Saver(String name_of_file)
@@ -18,6 +19,7 @@ public class User_Saver
     temp_storage = new Vector<String>();
     temp_storage.add("Username: "+ file_name);
     file_name = file_name +".txt";
+    directory_and_file_name = "C://users//" + file_name;
     writer = null;
     line_counter = 0;
     file =new File(file_name);
@@ -25,25 +27,26 @@ public class User_Saver
 
   public void write_to_file()
   {
+
     /*File is deleted everytime to make a new one */
     String temp_for_printing = "";
     try
     {
     // Create file
-    FileWriter fstream = new FileWriter(file_name);
-        BufferedWriter out = new BufferedWriter(fstream);
+    FileWriter fstream = new FileWriter(directory_and_file_name);
+    BufferedWriter out = new BufferedWriter(fstream);
 
     for(int i = 0; i<temp_storage.size(); i++)
     {
-        temp_for_printing = temp_for_printing + temp_storage.elementAt(i) +"\n";
+        temp_for_printing = temp_for_printing + temp_storage.elementAt(i);
     }
-
     out.write(temp_for_printing);
     //Close the output stream
     out.close();
     }catch (Exception e){//Catch exception if any
       System.err.println("Error: " + e.getMessage());
     }
+
   }
 
   public void read_file()
@@ -54,7 +57,7 @@ public class User_Saver
     DataInputStream dis = null;
 
     try {
-      fis = new FileInputStream(file);
+      fis = new FileInputStream(directory_and_file_name);
 
       // Here BufferedInputStream is added for fast reading.
       bis = new BufferedInputStream(fis);
@@ -85,15 +88,10 @@ public class User_Saver
   public void clear_stats()
   {
         /*Clears everything from the vector minus name and password */
-        for(int ij = 2; ij < temp_storage.size(); ij++)
+        for(int ij = 3; ij < temp_storage.size(); ij++)
         {
             temp_storage.remove(ij);
         }
-        for(int ijk = 2; ijk < temp_storage.size(); ijk++)
-        {
-            temp_storage.remove(ijk);
-        }
-
         /*writes new contents to the file*/
         write_to_file();
 
@@ -116,7 +114,7 @@ public class User_Saver
 
 
     // A File object to represent the filename
-    File f = new File(file_name);
+    File f = new File(directory_and_file_name);
 
     // Make sure the file or directory exists and isn't write protected
     if (!f.exists())

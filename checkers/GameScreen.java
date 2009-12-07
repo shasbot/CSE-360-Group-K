@@ -486,6 +486,7 @@ public class GameScreen implements MouseListener, ActionListener
    
 
             int playerwin = game.gameOver();
+            String results = "";
             if (playerwin != 0)
             {
                 //String win = "W";String lose = "L";String draw = "D";
@@ -497,6 +498,7 @@ public class GameScreen implements MouseListener, ActionListener
                     outOne.writeBytes("D\n");
                     outTwo.writeBytes(game.playerOneName + "\n");
                     outTwo.writeBytes("D\n");
+                    results = "The game was a draw.";
                 }
                 if (playerwin == 1)
                 {
@@ -504,6 +506,7 @@ public class GameScreen implements MouseListener, ActionListener
                    outOne.writeBytes("W\n");
                    outTwo.writeBytes(game.playerOneName + "\n");
                    outTwo.writeBytes("L\n");
+                   results = game.playerOneName + " wins.";
                 }
                 if (playerwin == 2)
                 {
@@ -511,6 +514,7 @@ public class GameScreen implements MouseListener, ActionListener
                    outOne.writeBytes("L\n");
                    outTwo.writeBytes(game.playerOneName + "\n");
                    outTwo.writeBytes("W\n");
+                   results = game.playerTwoName + " wins.";
                 }
                 for(int i = 0; i < movesPlayed; i++)
                 {
@@ -519,6 +523,9 @@ public class GameScreen implements MouseListener, ActionListener
                 	if(toDelete.exists())
                 		toDelete.delete();
                 }
+
+            JOptionPane.showMessageDialog(null, results);
+
                 System.exit(0);
             }
             outOne.close();

@@ -46,15 +46,15 @@ public void actionPerformed(ActionEvent event)  //important, associates ui actio
 
 public static void main (String[] args)
 {
-	GUI test = new GUI(8, "asdf", "fda");
-	/*
+	//GUI test = new GUI(8, "asdf", "fda");
+	
         JFrame f1 = new JFrame("3-D Checkers");
         f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homePageScreen p1 = new homePageScreen();
         f1.getContentPane().add(p1);
         f1.setSize(675,400);
         f1.setVisible(true);
-        */
+        
 }
 
 
