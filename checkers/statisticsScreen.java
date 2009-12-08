@@ -159,11 +159,11 @@ public class statisticsScreen extends javax.swing.JPanel {
             if(file.exists())
             {
                 flag1 = true;
-                System.out.println("IF IF TRUE TRUE");
+                //System.out.println("IF IF TRUE TRUE");
             }
             else
             {
-                System.out.println("ELSE ELSE FALSE FALSE");
+                //System.out.println("ELSE ELSE FALSE FALSE");
                 if(jTextField1.getText().compareTo("username")==0)
                     flag1 = true;
                 else
@@ -172,8 +172,8 @@ public class statisticsScreen extends javax.swing.JPanel {
             if(playerOne.compareToIgnoreCase(playerTwo) == 0)
                 flag1 = false;
             /***********************************/
-            System.out.println(flag1);
-            System.out.println(file1.exists());
+            //System.out.println(flag1);
+            //System.out.println(file1.exists());
 
             //if(playerOne != null && flag1)
 
@@ -207,7 +207,7 @@ public class statisticsScreen extends javax.swing.JPanel {
                 stats = stats + "Games lost: ";
             if(i == 3)
                 stats = stats + "Games drawn : ";
-            if(i == 4)
+            if(i == 4 && statsFlag)
             {
                 DecimalFormat twoDForm = new DecimalFormat("#.##");
                 //if(statistics[i])
@@ -252,6 +252,7 @@ public class statisticsScreen extends javax.swing.JPanel {
     String playerTwo = null;
     String playerTwo1 = null;
     boolean flag = false;
+    boolean statsFlag = false;
     File file;
     File file1;
     String stats;
@@ -280,10 +281,12 @@ public class statisticsScreen extends javax.swing.JPanel {
         //System.out.println(line);
         //System.out.println(playerTwo);
         //System.out.println("After PlayerTwo");
-        
+        statsFlag = one.hasNext();
+        if(statsFlag)
+        {
         File fileTwo = new File(playerTwo);
         if(playerTwo.compareTo("username") == 0){
-            System.out.println("if");
+            //System.out.println("if");
             while(one.hasNextLine())
             {
                 
@@ -327,6 +330,8 @@ public class statisticsScreen extends javax.swing.JPanel {
                     }
                 }
             }
+        }
+        //new if
         }
         one.close();
         winPercentage = gamesWon/gamesPlayed;
