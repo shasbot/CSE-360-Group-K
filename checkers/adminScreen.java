@@ -72,7 +72,7 @@ public class adminScreen extends javax.swing.JPanel {
 
     private class ButtonListener implements ActionListener {
 
-     public void actionPerformed(ActionEvent event) {
+        public void actionPerformed(ActionEvent event) {
             if (event.getSource() == jButton1)//checks to see if remove button was pushed
             {
 
@@ -81,12 +81,15 @@ public class adminScreen extends javax.swing.JPanel {
                     System.out.println("NO Files IN USERS FOLDER!!");
                 } else {
                     Object selected = users_list.getSelectedValue();//creates an object that is used to move selected values from the JList
-                    String to_be_deleted = (String) selected;
-                    User_Saver user_to_delete = new User_Saver(to_be_deleted);
-                    user_to_delete.delete_file();
-                    populate_vector();
-                    users_list.updateUI();//updates the JList selectedCourses
-
+                    if (selected == null) {
+                        System.out.println("Nothing was selected!!!");
+                    } else {
+                        String to_be_deleted = (String) selected;
+                        User_Saver user_to_delete = new User_Saver(to_be_deleted);
+                        user_to_delete.delete_file();
+                        populate_vector();
+                        users_list.updateUI();//updates the JList selectedCourses
+                    }
                 }
             }
 
@@ -98,13 +101,17 @@ public class adminScreen extends javax.swing.JPanel {
                     System.out.println("NO Files IN USERS FOLDER!!");
                 } else {
                     Object selected = users_list.getSelectedValue();//creates an object that is used to move selected values from the JList
-                    String user_to_clear = (String) selected;
-                    User_Saver user = new User_Saver(user_to_clear);
-                    user.read_file();
-                    user.clear_stats();
-                    user.write_to_file();
-                    populate_vector();
-                    users_list.updateUI();//updates the JList selectedCourses
+                    if (selected == null) {
+                        System.out.println("Nothing was selected!!!");
+                    } else {
+                        String user_to_clear = (String) selected;
+                        User_Saver user = new User_Saver(user_to_clear);
+                        user.read_file();
+                        user.clear_stats();
+                        user.write_to_file();
+                        populate_vector();
+                        users_list.updateUI();//updates the JList selectedCourses
+                    }
                 }
             }
 
