@@ -34,6 +34,7 @@ public class GameScreen implements MouseListener, ActionListener
     
     boolean warped = false;
 	boolean moved = false;
+    boolean kingJumped = false;
     
     ImageIcon whitePiece = new ImageIcon("pieces/whitepiece.png");
     ImageIcon whiteKing = new ImageIcon("pieces/whiteking.png");
@@ -375,7 +376,7 @@ public class GameScreen implements MouseListener, ActionListener
         System.out.println("CheckJumps() says: " + game.checkJumps());
          if(game.validateMove(c,a,b,z,x,y) == true)
          {	
-        	 if(!(warped && c != z) && !(moved && Math.abs(a-x) == 1))
+        	 if(!(warped && c != z) && !(kingJumped && Math.abs(a-x) == 1) && !((moved && !kingJumped)&& Math.abs(a-x) >= 1) )
         	 {
              game.move(c,a,b,z,x,y);// make move if move is valid
              try{ 
@@ -415,12 +416,15 @@ public class GameScreen implements MouseListener, ActionListener
         public void trackTurn(int a, int b, int c, int x, int y, int z) throws IOException
         {
 
-        	if(game.isKing(z, x, y))  //does not account for newly kinged piece?
+        	if(game.isKing(z, x, y))  
         	{
+                System.out.println("is king");
         		if( z != c)
         			warped = true;
         		if( a != x)
         			moved = true;
+                if(Math.abs(a-x) == 2)
+                    kingJumped = true;
         		if (moved && warped && !(Math.abs((a-x)) >= 2))  //moved and warped, current move is not jump
         		{
         			if (game.playerTurn == 1)
@@ -429,6 +433,7 @@ public class GameScreen implements MouseListener, ActionListener
     					game.playerTurn = 1;
         			moved = false;
         			warped = false;
+                    kingJumped = false;
         		}
         		else if (moved && Math.abs((a-x)) >= 2 && warped)    //moved and warped, and just jumped
         		{
@@ -440,6 +445,7 @@ public class GameScreen implements MouseListener, ActionListener
         					game.playerTurn = 1;
         				moved = false;
             			warped = false;
+                        kingJumped = false;
         			}
         		}
         		

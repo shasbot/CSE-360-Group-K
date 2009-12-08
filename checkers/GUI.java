@@ -29,6 +29,7 @@ GUI(int bsize, String playerOne, String playerTwo)
 	window.setVisible(true);
 	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	cp.add(setupscr.panel);
+    window.setSize(window.getSize());
 
 
     
